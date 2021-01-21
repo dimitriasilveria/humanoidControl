@@ -1,0 +1,6 @@
+git add -A #adiciona todos os arquivos que foram modificados
+
+git commit -m "$commit"
+
+git push -u origin master
+

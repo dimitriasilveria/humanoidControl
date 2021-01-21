@@ -1,0 +1,13 @@
+git add adagrad.py imprimirConsole.py README.md caminhada.py jacobianoCinematica.py  rungekutta42.py configGrafico.py kinematicModel.py setLimites.py DerivadaJacobiano.py kinematicRobo.py SGDmomento.py dualQuatDH.py mainControle.py SGD.py DualQuaternionClass.py  mainOtimizacao.py       teste2.py dualQuatMult.py model1.py teste.py fase1.py model2.py fase2.py NAG.py trajetoriaPes.py fase3.py               otimizacao.py trajetoria.py funcaoObjetivo.py plotarTrajetoria.py transformacao.py
+
+echo "what is the name of your commit?"
+
+read commit
+
+git commit -m "$commit"
+
+git push -u origin master
+
+
+
+

@@ -1,0 +1,17 @@
+<package format="2">
+  <name>c3pk_control</name>
+  <version>1.14.6</version>
+  <description>
+  This package provides a control for a humanoid robot.
+  </description>
+  <maintainer email="annykarol06@gmail.com & dimitriasilveria.ds@gmail.com">Ana Carolina end Dimitria Silveria</maintainer>
+  <license>BSD</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>rospy</exec_depend>
+
+  <test_depend>python-mock</test_depend>
+</package>
