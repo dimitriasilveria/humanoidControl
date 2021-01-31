@@ -56,12 +56,19 @@ hEdo       = glob.getHEDO() #passo para o calculo das derivadas
 #-----------------------------------------------------------
 #hubo 2 + velocidade maxima 0.4 m/s
 
-xod  = 0.00 #x inicial (d - desejado)
-yod  = 0.005 #y inicial
-zod  = 0.244 #z inicial (muito pequeno apens alguns centimetros)
-dxod = 0.35 #velocidade desejada no MS
-dyod = 0.00 #condição de balanço
-dzod = 0.00 #velocidade em z (igual a zero condição necessaria)
+xod  = 0.00
+yod  = 0.05
+zod  = 0.6
+dxod = 0.4
+dyod = 0.00
+dzod = 0.00
+
+# xod  = 0.00 #x inicial (d - desejado)
+# yod  = 0.05 #y inicial
+# zod  = 0.204#0.244 #z inicial (muito pequeno apens alguns centimetros)
+# dxod = 0.4 #velocidade desejada no MS
+# dyod = 0.00 #condição de balanço
+# dzod = 0.00 #velocidade em z (igual a zero condição necessaria)
 
 #-----------------------------------------------------------
 #Tamanho do passo (não sendo usado ainda estudar como incorporar 
@@ -91,11 +98,16 @@ BSSM   = glob.getBSSM()
 #k = 19611.4821640244
 #Bss = 0.0275951012
 
-phi = 0.45524754698981484
-theta = 0.3772638018925301
-#theta = 1.2
-k = 399.4462999033558
-Bss = 0.09999843501985586
+phi = 0.5000000000
+theta = 0.3801423352
+k = 19611.4821640244
+Bss = 0.0275951012
+
+# phi = 0.7854
+# theta = 0.2423342738
+# #theta = 1.2
+# k = 818.4462999033558
+# Bss = 0.0
 U = np.zeros((5,1))
 k = k/expK #tratar o valor 
 U[0,0] = theta 
@@ -121,5 +133,5 @@ tipo = 1 #recebe 0 ou 1 (alterar para executar a otimização ou não)
 #metodo : 1 SGD com momento
 #metodo : 2 Nesterov accelerated gradient
 #metodo : 3 Adgrad
-metodo = 0
+metodo = 3
 otimizacao(U,X,tipo,metodo) 

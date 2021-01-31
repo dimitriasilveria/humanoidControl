@@ -205,7 +205,7 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
             if abs(theta[j,0]) > hpi:
                 theta[j,0] = np.sign(theta[j,0])*hpi
         
-        glob.setThetaR(theta[:,0])    
+        #glob.setThetaR(theta[:,0])    
         ha  = kinematicRobo(theta,hOrg,hP,1,1) 
 
         #plotar os dados
@@ -253,9 +253,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         do2 = np.dot(Np2,produto)
         od2  = (do2*dt)/2
         theta[:,1] = theta[:,1] + od2[:,0] 
-		
-		glob.setThetaL(theta[:,1])
-        ha2  = kinematicRobo(theta,hOrg,hP,1,0)
+		#glob.setThetaL(theta[:,1])
+
+        ha2 = kinematicRobo(theta,hOrg,hP,1,0)
 
         #plotar os dados
         #for j in range(8):
@@ -281,5 +281,5 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #disp(msg)
     
     #hold on
-    #plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
+    plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
     return ha,ha2,theta,tempo

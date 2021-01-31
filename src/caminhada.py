@@ -118,8 +118,7 @@ def caminhada(U0,X0,tam,vecGanho1,vecGanho2):
     theta = np.concatenate((thetaR,thetaL),axis=1) # parametros variaveis
     tempo = 0
 
-    un = U0
-        
+           
     #primeira parte da caminhdada
     #print('primeiro passinho')
     passos = 1

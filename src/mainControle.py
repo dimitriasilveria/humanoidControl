@@ -47,14 +47,24 @@ U0 = np.zeros((5,1))
 #-----------------------------------------------------------
 #condição inicial para MS
 #-----------------------------------------------------------
-xod  = 0.0001 #x inicial
-yod  = 0.05 #y inicial
-zod  = 0.6 #z inicial 
-dxod = 0.7 #velocidade desejada no MS
-dyod = 0.00 #condição de balanço
-dzod = 0.00 #velocidade em z (igual a zero condição necessaria)
+# xod  = 0.0001 #x inicial
+# yod  = 0.05 #y inicial
+# zod  = 0.6 #z inicial 
+# dxod = 0.7 #velocidade desejada no MS
+# dyod = 0.00 #condição de balanço
+# dzod = 0.00 #velocidade em z (igual a zero condição necessaria)
 
-expK   = 10000 #ordem de grandeza da constante massa-mola
+#Darwin
+xod  = 0.00
+yod  = 0.035
+zod  = 0.22
+dxod = 0.24
+dyod = 0.00
+dzod = 0.00
+
+
+#expK   = 10000 #ordem de grandeza da constante massa-mola Hubo
+expK   = 1000 #Darwin
 
 #-----------------------------------------------------------
 #variável de controle inicial
@@ -62,10 +72,17 @@ expK   = 10000 #ordem de grandeza da constante massa-mola
 #-----------------------------------------------------------
 
 #1m/s
-phi = 0.3408040779
-theta = 0.4052906627
-k = 19196.8680322965
-Bss = 0.0415640571
+#HUBO
+# phi = 0.3408040779
+# theta = 0.4052906627
+# k = 19196.8680322965
+# Bss = 0.0415640571
+
+#DArwin dynamic model parameters
+phi= 0.6482570031
+theta = 0.2823507428
+k = 153.9300628927
+Bss = 0.0414743461
 
 #Ganhos LQR (perna direita) e proporcional (perna esquerda)
 ganhoS1 = 0
@@ -97,6 +114,7 @@ X0 = np.array([[xod],[yod],[zod],[dxod],[dyod],[dzod]]) #condição inicial
 vecGanho1 = np.array([ganhoS1, ganhoQ1, ganhoR1, ganhoK1]).reshape((4,1))
 vecGanho2 = np.array([ganhoS2, ganhoQ2, ganhoR2, ganhoK2]).reshape((4,1))
 
-caminhada2(U0,X0,quatidadePassos,vecGanho1,vecGanho2)
+#caminhada2(U0,X0,quatidadePassos,vecGanho1,vecGanho2)
+caminhada(U0,X0,quatidadePassos,vecGanho1,vecGanho2)
 end = time.time()
 print('execution time:', end - begin)

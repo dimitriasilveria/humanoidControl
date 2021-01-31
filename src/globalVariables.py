@@ -5,17 +5,18 @@ class GlobalVariables:
     theaL = np.zeros((6,1))
     hpi = (np.pi)/2.0
     #hubo's parameters
-    #L1 = 0.085
-    #L2 = 0.0
-    #L3 = 0.3
-    #L4 = 0.3
-    #L5 = 0.0663
+    # L1 = 0.085
+    # L2 = 0.0
+    # L3 = 0.3
+    # L4 = 0.3
+    # L5 = 0.0663
     #Darwin's parameters
     L1 = 0.035
     L2 = 0.0285
     L3 = 0.11
     L4 = 0.11
     L5 = 0.0
+    
     height = L2 + L3 + L4 + L5
     oi = np.array([0.0, -hpi, 0.0, 0.0, 0.0, 0.0]).reshape((6,1))
     di = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0]).reshape((6,1))
@@ -33,16 +34,17 @@ class GlobalVariables:
         #MDH[j,5] = ol[j,0]
     #print(MDH)
     hEdo = 10**(-3.85) #passo para o cálculo da EDO
-    #m = 38.1 hubo
+    #m = 38.1 #hubo
     m = 3.5 #Darwin
     #L = 0.63 #tamanho da perna em relação ao CoM Hubo
     #L = 0.244 #darwin's leg size
-    L = 0.204
+    #L = 0.204
+    L = 0.22276
     g = 9.8 
-    h = 10**(-4) #passo para o calculo das derivadas
+    h = 10**(-6) #passo para o calculo das derivadas
     maxNGrad = 10**6 #número máximo de iterações método
-    ganhoAlpha = 10**(-3) #ganho do fator de ganho para cada passo
-    gamma = 0.4 #ganho para os método gradiente(momento)
+    ganhoAlpha = 10**(-1) #ganho do fator de ganho para cada passo
+    gamma = 0.2 #ganho para os método gradiente(momento)
     thetaM = 0.5
     phiM = 0.5
     KM = 2.0
@@ -52,10 +54,17 @@ class GlobalVariables:
     #expK = 10000.0 #ordem de grandeza da constante massa-mola
     expK = 1000.0 #ordem de grandeza da constante massa-mola Darwin
 
-    phi = 0.3408040779
-    theta = 0.4052906627
-    k = 19196.8680322965
-    Bss = 0.0415640571
+    #Hubo dynamic model parameters
+    # phi = 0.3408040779
+    # theta = 0.4052906627
+    # k = 19196.8680322965
+    # Bss = 0.0415640571
+
+    #DArwin dynamic model parameters
+    phi= 0.6482570031
+    theta = 0.2823507428
+    k = 153.9300628927
+    Bss = 0.0414743461
     
     def getHpi(self):
         return self.hpi
