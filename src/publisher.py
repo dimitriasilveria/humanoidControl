@@ -3,6 +3,7 @@
 import rospy
 import numpy as np 
 from std_msgs.msg import Float64
+from globalVariables import GlobalVariables
 
 theta= Float64()
 a = GlobalVariables()
@@ -27,46 +28,46 @@ p12= rospy.Publisher('/robotis_op3/r_sho_roll_position/command',Float64,queue_si
 rate = rospy.Rate(10)
 
 while not rospy.is_shutdown():
-a.getThetaR() = Vr #vetor perna direira p1-6
-a.getThetaL() = Vl #vetor perna esquerda p7-12
+    Vr = a.getThetaR()   #vetor perna direira p1-6
+    Vl = a.getThetaL()   #vetor perna esquerda p7-12
 
-theta.data = Vr[0] #escrevendo Vr[0] em theta
-p1.publish(theta) #publicando theta
+    theta.data = Vr[0] #escrevendo Vr[0] em theta
+    p1.publish(theta) #publicando theta
+    print("publicando", Vr)
+    theta.data = Vr[1]
+    p2.publish(theta)
 
-theta.data = Vr[1]
-p2.publish(theta)
+    theta.data = Vr[2]
+    p3.publish(theta)
 
-theta.data = Vr[2]
-p3.publish(theta)
+    theta.data = Vr[3]
+    p4.publish(theta)
 
-theta.data = Vr[3]
-p4.publish(theta)
+    theta.data = Vr[4]
+    p5.publish(theta)
 
-theta.data = Vr[4]
-p5.publish(theta)
+    theta.data = Vr[5]
+    p6.publish(theta)
 
-theta.data = Vr[5]
-p6.publish(theta)
+    theta.data = Vl[0]
+    p7.publish(theta)
 
-theta.data = Vl[0]
-p7.publish(theta)
+    theta.data = Vl[1]
+    p8.publish(theta)
 
-theta.data = Vl[1]
-p8.publish(theta)
+    theta.data = Vl[2]
+    p9.publish(theta)
 
-theta.data = Vl[2]
-p9.publish(theta)
+    theta.data = Vr[3]
+    p10.publish(theta)
 
-theta.data = Vr[3]
-p10.publish(theta)
+    theta.data = Vl[4]
+    p11.publish(theta)
 
-theta.data = Vl[4]
-p11.publish(theta)
+    theta.data = Vl[5]
+    p12.publish(theta)
 
-theta.data = Vl[5]
-p12.publish(theta)
-
-rate.sleep()
+    rate.sleep()
 
 
 

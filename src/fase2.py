@@ -203,7 +203,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
             if abs(theta[j,1]) > hpi:
                 theta[j,1] = np.sign(theta[j,1])*hpi
 
-		#glob.setThetaL(theta[:,1])
+        glob.setThetaL(theta[:,1])
         ha  = kinematicRobo(theta,hOrg,hP,0,1) #posição do CoM com perna esquerda apoiada
 
         #controlador 2
@@ -241,7 +241,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #for j in range(6):
         theta[:,0] = theta[:,0] + od2[:,0]
         
-        #glob.setThetaR(theta[:,0])
+        glob.setThetaR(theta[:,0])
         ha2  = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
         
         #plotar os dados
@@ -256,6 +256,8 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #orientação
         ra = getRotationDualQuat(ha)
         rd = getRotationDualQuat(mhd)
+        if ra[0,0] > 1:
+            ra[0,0] = 1
         co = mt.acos(ra[0,0])
         angle[i] = co
         co = mt.acos(rd[0,0])
@@ -286,5 +288,5 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #disp(msg)
     
     #hold on
-    plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'r','b')
-    return ha,ha2,theta,tempo
+    #plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'r','b')
+    return ha,ha2,theta,tempo, Mtheta, Mtheta2

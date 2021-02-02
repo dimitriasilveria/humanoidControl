@@ -2,7 +2,7 @@ import numpy as np
 import math as mt
 class GlobalVariables:
     thetaR = np.zeros((6,1))
-    theaL = np.zeros((6,1))
+    thetaL = np.zeros((6,1))
     hpi = (np.pi)/2.0
     #hubo's parameters
     # L1 = 0.085
