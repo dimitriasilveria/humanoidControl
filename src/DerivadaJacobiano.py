@@ -17,8 +17,8 @@ def DerivadaJacobiano(theta,hOrg,hP,tipo,CoM,ind):
     thetar = np.zeros((6,1))
     thetal = np.zeros((6,1))
     #for j in range(6):
-    thetar[:,0] = theta[:,0].reshape((6,1))
-    thetal[:,0] = theta[:,1].reshape((6,1))
+    thetar[:,0] = theta[:,0]
+    thetal[:,0] = theta[:,1]
 
 #-----------------------------------------------------------
 #cálculo do primeiro ponto para 2h

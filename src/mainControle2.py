@@ -20,14 +20,14 @@ p1 = rospy.Publisher('/robotis_op3/r_hip_yaw_position/command',Float64,queue_siz
 p2 = rospy.Publisher('/robotis_op3/r_hip_roll_position/command',Float64,queue_size=1)
 p3 = rospy.Publisher('/robotis_op3/r_hip_pitch_position/command',Float64,queue_size=1)
 p4 = rospy.Publisher('/robotis_op3/r_knee_position/command',Float64,queue_size=1)
-p5 = rospy.Publisher('/robotis_op3/r_sho_pitch_position/command',Float64,queue_size=1)
-p6 = rospy.Publisher('/robotis_op3/r_sho_roll_position/command',Float64,queue_size=1)
+p5 = rospy.Publisher('/robotis_op3/r_ank_roll_position/command',Float64,queue_size=1)
+p6 = rospy.Publisher('/robotis_op3/r_ank_pitch_position/command',Float64,queue_size=1)
 p7 = rospy.Publisher('/robotis_op3/l_hip_yaw_position/command',Float64,queue_size=1)
 p8 = rospy.Publisher('/robotis_op3/l_hip_roll_position/command',Float64,queue_size=1)
 p9 = rospy.Publisher('/robotis_op3/l_hip_pitch_position/command',Float64,queue_size=1)
 p10 = rospy.Publisher('/robotis_op3/l_knee_position/command',Float64,queue_size=1)
-p11 = rospy.Publisher('/robotis_op3/l_sho_pitch_position/command',Float64,queue_size=1)
-p12= rospy.Publisher('/robotis_op3/r_sho_roll_position/command',Float64,queue_size=1)
+p11 = rospy.Publisher('/robotis_op3/l_ank_roll_position/command',Float64,queue_size=1)
+p12= rospy.Publisher('/robotis_op3/r_ank_pitch_position/command',Float64,queue_size=1)
 
 #here ends ROS node configuring###########################################
 
@@ -139,7 +139,7 @@ from LQR3D import LRQ3D
 #-----------------------------------------------------------
 #Obter todas as trajeotrias do CoM
 #-----------------------------------------------------------
-rate = rospy.Rate(10)
+rate = rospy.Rate(1)
 
 while not rospy.is_shutdown():
 
@@ -239,7 +239,7 @@ while not rospy.is_shutdown():
     theta = np.concatenate((thetaR,thetaL),axis=1) # parametros variaveis
     tempo = 0
 
-            
+          
     #primeira parte da caminhdada
     #print('primeiro passinho')
     passos = 1
@@ -285,6 +285,7 @@ while not rospy.is_shutdown():
         angle.data = Vl[5,0]
         p12.publish(angle)
 
+        rospy.sleep(1)
 
     # if passos >=tam:
     #     return

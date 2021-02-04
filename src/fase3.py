@@ -176,9 +176,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         A  = dualHamiltonOp(aux,0)
         c = -1*np.transpose(aux)
         #inicio do controlador  
-        #Ja = jacobianoCinematica(theta,hOrg,hP,1,1)  
-        xe = KinematicModel(MDH,theta,6,0)
-        Ja = jacobiano2(theta,hOrg,hP,xe) 
+        Ja = jacobianoCinematica(theta,hOrg,hP,1,1)  
+        # xe = KinematicModel(MDH,theta,6,0)
+        # Ja = jacobiano2(theta,hOrg,hP,xe) 
         #calculo de P e E
         #calculo de N   
         Hd  = dualHamiltonOp(mhd,0)
@@ -201,11 +201,11 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         for j in range(6):
             theta[j,0] = theta[j,0] + od[j,0]
 
-        for j in range(0,6,1):
-            if abs(theta[j,0]) > hpi:
-                theta[j,0] = np.sign(theta[j,0])*hpi
+        # for j in range(0,6,1):
+        #     if abs(theta[j,0]) > hpi:
+        #         theta[j,0] = np.sign(theta[j,0])*hpi
         
-        glob.setThetaR(theta[:,0])    
+ 
         ha  = kinematicRobo(theta,hOrg,hP,1,1) 
 
         #plotar os dados
@@ -235,9 +235,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #A2  = dualHamiltonOp(aux2,0)
         c = -np.transpose(aux2)
         #inicio do controlador  
-        #Ja2 = jacobianoCinematica(theta,hOrg,hP,1,0)
-        xe2 = kinematicRobo(theta,hOrg,hP,1,0)
-        Ja2 = jacobianoPes(theta,ha,xe2)
+        Ja2 = jacobianoCinematica(theta,hOrg,hP,1,0)
+        # xe2 = kinematicRobo(theta,hOrg,hP,1,0)
+        # Ja2 = jacobianoPes(theta,ha,xe2)
         #calculo de P e E
         #calculo de N   
         Hd2 = dualHamiltonOp(mhd2,0)
@@ -255,7 +255,6 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         do2 = np.dot(Np2,produto)
         od2  = (do2*dt)/2
         theta[:,1] = theta[:,1] + od2[:,0] 
-        glob.setThetaL(theta[:,1])
 
         ha2 = kinematicRobo(theta,hOrg,hP,1,0)
 
@@ -283,5 +282,5 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #disp(msg)
     
     #hold on
-    #plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
+    plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
     return ha,ha2,theta,tempo, Mtheta, Mtheta2

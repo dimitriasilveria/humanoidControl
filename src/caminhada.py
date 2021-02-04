@@ -122,7 +122,7 @@ def caminhada(U0,X0,tam,vecGanho1,vecGanho2):
     #primeira parte da caminhdada
     #print('primeiro passinho')
     passos = 1
-    [ha,ha2,theta,tempo1] = fase1(trajCoM1,indContadoPe,trajPB1,theta,vecGanho1)
+    [ha,ha2,theta,tempo1,Mtheta, Mtheta2] = fase1(trajCoM1,indContadoPe,trajPB1,theta,vecGanho1)
     
     if passos >=tam:
         return
@@ -140,7 +140,7 @@ def caminhada(U0,X0,tam,vecGanho1,vecGanho2):
         trajP[:,0] = trajP[:,0]+ i*2*passoComprimento
 
         passos = passos + 1
-        [ha,ha2,theta,tempo2] = fase2(ha,ha2,trajCoM,np.size(trajPA,0),trajP,theta,tempo,vecGanho2)
+        [ha,ha2,theta,tempo2,Mtheta, Mtheta2] = fase2(ha,ha2,trajCoM,np.size(trajPA,0),trajP,theta,tempo,vecGanho2)
         if passos >=tam: #tam é a quantidade de passos da trajetória desejada
             return
         
@@ -158,7 +158,7 @@ def caminhada(U0,X0,tam,vecGanho1,vecGanho2):
         #quem serão xn e pc??????????????????????????????????????????????????
         #[PA,PB,PC,trajCoM,indContadoPe] = trajetoria(un,xn)   
         passos = passos + 1
-        [ha,ha2,theta,tempo3] = fase3(ha,ha2,trajCoM,np.size(trajPB,0),trajP,theta,tempo,vecGanho1)
+        [ha,ha2,theta,tempo3,Mtheta, Mtheta2] = fase3(ha,ha2,trajCoM,np.size(trajPB,0),trajP,theta,tempo,vecGanho1)
         
         if passos >=tam:
             return

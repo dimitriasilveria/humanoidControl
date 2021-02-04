@@ -218,7 +218,6 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
             if abs(theta[j,0]) > hpi:
                 theta[j,0] = np.sign(theta[j,0])*hpi
 
-        #glob.setThetaR(theta[:,0])
         ha  = kinematicRobo(theta,hOrg,hP,1,1)  #não deveria ser hd?????????????????????????????????????????
 
         #plotar os dados
@@ -233,9 +232,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #orientação
         ra = getRotationDualQuat(ha) ##extrai o vetor do dual quat que representa a rotação
         rd = getRotationDualQuat(mhd)
-        if ra[0,0] > 1:
-            ra[0,0] = 1
-            
+        # if ra[0,0] > 1:
+        #     ra[0,0] = 1 
         co = mt.acos(ra[0,0])
         angle[i] = co
         co = mt.acos(rd[0,0])
@@ -281,7 +279,6 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
             if abs(theta[j,1]) > hpi:
                 theta[j,1] = np.sign(theta[j,1])*hpi
 		
-        glob.setThetaL(theta[:,1])
         ha2  = kinematicRobo(theta,hOrg,hP,1,0)
         
         #plotar os dados
@@ -309,6 +306,6 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #toc = tm.time() - t #elapsed
         #msg = print('#d de  #d | tempo (s): #f',i,T,toc);
         #disp(msg);
-    #t1 = 0
-    #plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
+    t1 = 0
+    plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
     return ha, ha2, theta, tempo, Mtheta, Mtheta2
