@@ -152,13 +152,13 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         aux = dualQuatMult(dualQuatConj(Mhd[:,i+1].reshape((8,1))),Mdhd[:,i+1].reshape((8,1)))
         A  = dualHamiltonOp(aux,0)
         c = -aux
-        prod2 = np.dot(P,Rinv)
-        P = P -dt*(-np.dot(P,A) - np.dot(A.T,P) + np.dot(prod2,P) - Q)
+        #prod2 = np.dot(P,Rinv)
+        P = P -(-P@A -A.T@P + P@Rinv@P - Q)*dt
         #MP2[:,i] = P[:]
         for j in range(8):
             for k in range(8):
                 MP2[j,k,i] = P[j,k]
-        E = E - (-np.dot(A.T,E) + np.dot(prod2,E) - np.dot(P,c))*dt
+        E = E - ((-1)*(A.T)@E + P@Rinv@E - P@c)*dt
         #for j in range(8):
         ME2[:,i] = E[:,0]
 
@@ -182,8 +182,8 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #calculo de P e E
         #calculo de N   
         Hd  = dualHamiltonOp(mhd,0)
-        prod3 = np.dot(Hd,C8)
-        N  = np.dot(prod3,Ja)
+        #prod3 = np.dot(Hd,C8)
+        N  = Hd@C8@Ja
         #pseudo inversa de N
         Np  = np.linalg.pinv(N)
 
@@ -193,9 +193,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #for j in range(8):
         E[:,0] = ME2[:,i]
         #P = np.reshape(MP2[:,i],np.shape(A))
-        Pxe= np.dot(P,e)   
-        NpxRinv= np.dot(Np,Rinv)  
-        do = np.dot(NpxRinv,(Pxe + E))
+        # Pxe= np.dot(P,e)   
+        # NpxRinv= np.dot(Np,Rinv)  
+        do = Np@Rinv@(P@e + E)
         #calculo do o deseja
         od  = (do*dt)/2     
         for j in range(6):
@@ -241,8 +241,8 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #calculo de P e E
         #calculo de N   
         Hd2 = dualHamiltonOp(mhd2,0)
-        prod1= np.dot(Hd2,C8)
-        N2  = np.dot(prod1,Ja2)
+        #prod1= np.dot(Hd2,C8)
+        N2  = Hd2@C8@Ja2
         #pseudo inversa de N
         Np2  = np.linalg.pinv(N2)
         
@@ -251,8 +251,8 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
 
         vec2 = dualQuatMult(dualQuatConj(ha2),mdhd2)
         #
-        produto= np.dot(K2,e2-vec2)
-        do2 = np.dot(Np2,produto)
+        #produto= np.dot(K2,e2-vec2)
+        do2 = Np2@(K2@e2-vec2)
         od2  = (do2*dt)/2
         theta[:,1] = theta[:,1] + od2[:,0] 
 
