@@ -9,5 +9,5 @@
 import numpy as np 
 import math as mt 
 def quatNorm(q):
-    normq = mt.sqrt(q[1,1]*q[1,1] + q[2,1]*q[2,1] + q[3,1]*q[3,1] + q[4,1]*q[4,1])
+    normq = mt.sqrt(q[0,0]*q[0,0] + q[1,0]*q[1,0] + q[2,0]*q[2,0] + q[3,0]*q[3,0])
     return normq

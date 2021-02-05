@@ -176,9 +176,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         A  = dualHamiltonOp(aux,0)
         c = -1*np.transpose(aux)
         #inicio do controlador  
-        Ja = jacobianoCinematica(theta,hOrg,hP,1,1)  
-        # xe = KinematicModel(MDH,theta,6,0)
-        # Ja = jacobiano2(theta,hOrg,hP,xe) 
+        #Ja = jacobianoCinematica(theta,hOrg,hP,1,1)  
+        xe = KinematicModel(MDH,theta,6,0)
+        Ja = jacobiano2(theta,hOrg,hP,xe) 
         #calculo de P e E
         #calculo de N   
         Hd  = dualHamiltonOp(mhd,0)
@@ -235,9 +235,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #A2  = dualHamiltonOp(aux2,0)
         c = -np.transpose(aux2)
         #inicio do controlador  
-        Ja2 = jacobianoCinematica(theta,hOrg,hP,1,0)
-        # xe2 = kinematicRobo(theta,hOrg,hP,1,0)
-        # Ja2 = jacobianoPes(theta,ha,xe2)
+        #Ja2 = jacobianoCinematica(theta,hOrg,hP,1,0)
+        xe2 = kinematicRobo(theta,hOrg,hP,1,0)
+        Ja2 = jacobianoPes(theta,ha,xe2)
         #calculo de P e E
         #calculo de N   
         Hd2 = dualHamiltonOp(mhd2,0)

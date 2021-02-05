@@ -122,9 +122,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
     #Mdhd2[:,0]  = (Mhd2[:,0]  - Mhd2[:,0])*(1/dt)
 
     for i in range (1,T,1):
-        for j in range(8):
-            Mdhd[j,i] = (Mhd[j,i] - Mhd[j,i-1])*(1/dt) #por que ele fazer isso????????????????????????????????????????????????????
-            Mdhd2[j,i]  =  (Mhd2[j,i] - Mhd2[j,i-1])*(1/dt) #derivada de hd, que é a posição desejada             
+        Mdhd[:,i] = (Mhd[:,i] - Mhd[:,i-1])*(1/dt) #por que ele fazer isso????????????????????????????????????????????????????
+        Mdhd2[:,i]  =  (Mhd2[:,i] - Mhd2[:,i-1])*(1/dt) #derivada de hd, que é a posição desejada             
 
     ##################################
     #inicio do codigo
@@ -232,8 +231,6 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #orientação
         ra = getRotationDualQuat(ha) ##extrai o vetor do dual quat que representa a rotação
         rd = getRotationDualQuat(mhd)
-        # if ra[0,0] > 1:
-        #     ra[0,0] = 1 
         co = mt.acos(ra[0,0])
         angle[i] = co
         co = mt.acos(rd[0,0])

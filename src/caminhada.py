@@ -5,6 +5,7 @@ from fase1 import fase1
 from fase2 import fase2
 from globalVariables import GlobalVariables
 from trajetoriaPesInicio import trajetoriaPesInicio
+from trajetoriaPesInicioBackup import trajetoriaPesInicio2
 import numpy as np
 from LQR3D import LRQ3D
 #-----------------------------------------

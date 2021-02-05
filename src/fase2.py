@@ -153,12 +153,12 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         aux = dualQuatMult(dualQuatConj(Mdhd[:,i+1].reshape((8,1))),Mdhd[:,i+1].reshape((8,1)))
         A  = dualHamiltonOp(aux,0)
         c = -aux
-        prod2 = np.dot(P,Rinv)
-        P = P -dt*(-np.dot(P,A) - np.dot(A.T,P) + np.dot(prod2,P) - Q)
+        #prod2 = np.dot(P,Rinv)
+        P = P -(-P@A -A.T@P + P@Rinv@P - Q)*dt
         for j in range(8):
             for k in range(8):
                 MP2[j,k,i] = P[j,k]
-        E = E - (-np.dot(A.T,E) + np.dot(prod2,E) - np.dot(P,c))*dt
+        E = E - ((-1)*(A.T)@E + P@Rinv@E - P@c)*dt
         #for j in range(8):
         ME2[:,i] = E[:,0]
     
@@ -168,32 +168,30 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #Controlador LQR para O CoM
         #calculo de A e c
         #for j in range(8):
-        mhd[:,0] = Mhd[:,i]
-        mdhd[:,0] = Mdhd[:,i] 
-        aux = dualQuatMult(dualQuatConj(mhd),mdhd)
+        # mhd[:,0] = Mhd[:,i]
+        # mdhd[:,0] = Mdhd[:,i] 
+        aux = dualQuatMult(dualQuatConj(Mhd[:,i].reshape((8,1))),Mdhd[:,i].reshape((8,1)))
         A  = dualHamiltonOp(aux,0)
         c = -aux
         #inicio do controlador  
-        Ja = jacobianoCinematica(theta,hOrg,hP,0,1)
-        #xe = KinematicModel(MDH,theta,6,0)
-        #Ja = jacobiano2(theta,hOrg,hP,xe)   
+        #Ja = jacobianoCinematica(theta,hOrg,hP,0,1)
+        xe = KinematicModel(MDH,theta,6,0)
+        Ja = jacobiano2(theta,hOrg,hP,xe)   
         #calculo de P e E
         #calculo de N   
-        Hd  = dualHamiltonOp(mhd,0)
-        prod3 = np.dot(Hd,C8)
-        N  = np.dot(prod3,Ja)
+        Hd  = dualHamiltonOp(Mhd[:,i].reshape((8,1)),0)
+        # prod3 = np.dot(Hd,C8)
+        N  = Hd@C8@Ja
         #pseudo inversa de N
         Np  = np.linalg.pinv(N)
         #######################################################paramos aqui
         #calculo do erro
-        e  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) - dualQuatMult(dualQuatConj(ha),mhd)
+        e  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) - dualQuatMult(dualQuatConj(ha),Mhd[:,i].reshape((8,1)))
         #calculo de P e E
         #for j in range(8):
         E[:,0] = ME2[:,i]
         #P = np.reshape(MP2[:,i],np.shape(A))
-        Pxe= np.dot(P,e)
-        NpxRinv= np.dot(Np,Rinv)  
-        do = np.dot(NpxRinv,(Pxe + E))
+        do = Np@Rinv@(P@e + E)
         #calculo do o deseja
         od  = dt*do/2    
         #for j in range(6):
@@ -209,9 +207,9 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         mdhd2 = np.zeros((8,1))
         mhd2 = np.zeros((8,1))
         #for j in range(8):
-        mdhd2[:,0] = Mdhd2[:,i]
-        mhd2[:,0] = Mhd2[:,i]
-        aux2 = dualQuatMult(dualQuatConj(mhd2),mdhd2)
+        # mdhd2[:,0] = Mdhd2[:,i]
+        # mhd2[:,0] = Mhd2[:,i]
+        aux2 = dualQuatMult(dualQuatConj(Mhd2[:,i].reshape((8,1))),Mdhd2[:,i].reshape((8,1)))
         #A2  = dualHamiltonOp(aux2,0)
         c = -aux2
         #inicio do controlador  
@@ -220,20 +218,19 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         Ja2 = jacobianoPes(theta,ha,xe2)
         #calculo de P e E
         #calculo de N   
-        Hd2  = dualHamiltonOp(mhd2,0)
-        prod1= np.dot(Hd2,C8)
-        N2  = np.dot(prod1,Ja2)
+        Hd2  = dualHamiltonOp(Mhd[:,i].reshape((8,1)),0)
+        # prod1= np.dot(Hd2,C8)
+        N2  = Hd2@C8@Ja2
         
         #pseudo inversa de N
         Np2  = np.linalg.pinv(N2)
 
         #calculo do erro
-        e2  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) -  dualQuatMult(dualQuatConj(ha2),mhd2)
+        e2  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) -  dualQuatMult(dualQuatConj(ha2),Mhd2[:,i].reshape((8,1)))
 
-        vec2 = dualQuatMult(dualQuatConj(ha2),mdhd2)
+        vec2 = dualQuatMult(dualQuatConj(ha2),Mhd2[:,i].reshape((8,1)))
         #do2 = np.zeros(20,20)
-        produto= np.dot(K2,e2-vec2)
-        do2 = np.dot(Np2,produto)
+        do2 = Np2@(K2@e2-vec2)
         #od2 = np.zeros(100)
         od2 = do2*dt
         #for j in range(6):
@@ -252,7 +249,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         Posd[:,i] = posd[:,0]
         #orientação
         ra = getRotationDualQuat(ha)
-        rd = getRotationDualQuat(mhd)
+        rd = getRotationDualQuat(Mhd[:,i].reshape((8,1)))
         co = mt.acos(ra[0,0])
         angle[i] = co
         co = mt.acos(rd[0,0])
@@ -265,13 +262,13 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         Mha2[:,i] = ha2[:,0]
         #posição
         pos2 = getPositionDualQuat(ha2)
-        posd2 = getPositionDualQuat(mhd2)
+        posd2 = getPositionDualQuat(Mhd2[:,i].reshape((8,1)))
         #for j in range(3):
         Pos2[:,i]  = pos2[:,0]
         Posd2[:,i] = posd2[:,0]
         #orientação
         ra = getRotationDualQuat(ha2)
-        rd = getRotationDualQuat(mhd2)
+        rd = getRotationDualQuat(Mhd2[:,i].reshape((8,1)))
         co = mt.acos(ra[0,0])
         angle2[i] = co
         co = mt.acos(rd[0,0])
