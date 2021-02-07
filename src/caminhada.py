@@ -74,7 +74,7 @@ def caminhada(U0,X0,tam,vecGanho1,vecGanho2):
     
     passoComprimento2 = PB[0,0] #tamanho do passo
     passoLargura2     = 0 #Largura do passo
-    passoAltura2      = 0.2    #altura de cada passo
+    passoAltura2      = 0.07    #altura de cada passo
     
     #trajetoria pé A
     tamTrajPa= (np.size(trajCoM1,0)+indContadoPe)/2
