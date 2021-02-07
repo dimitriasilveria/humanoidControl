@@ -150,7 +150,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #mdhdPlus[:,0] = Mdhd[:,i+1]
         mhd[:,0] = Mhd[:,i]
         mdhd[:,0] = Mdhd[:,i] 
-        aux = dualQuatMult(dualQuatConj(Mdhd[:,i+1].reshape((8,1))),Mdhd[:,i+1].reshape((8,1)))
+        aux = dualQuatMult(dualQuatConj(Mhd[:,i+1].reshape((8,1))),Mdhd[:,i+1].reshape((8,1)))
         A  = dualHamiltonOp(aux,0)
         c = -aux
         #prod2 = np.dot(P,Rinv)
@@ -176,7 +176,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #inicio do controlador  
         #Ja = jacobianoCinematica(theta,hOrg,hP,0,1)
         xe = KinematicModel(MDH,theta,6,0)
-        Ja = jacobiano2(theta,hOrg,hP,xe)   
+        Ja = jacobiano2(theta,hOrg,hP,xe,1)   
         #calculo de P e E
         #calculo de N   
         Hd  = dualHamiltonOp(Mhd[:,i].reshape((8,1)),0)
@@ -215,10 +215,10 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #inicio do controlador  
         #Ja2 = jacobianoCinematica(theta,hOrg,hP,0,0)
         xe2 = kinematicRobo(theta,hOrg,hP,1,0)
-        Ja2 = jacobianoPes(theta,ha,xe2)
+        Ja2 = jacobianoPes(theta,ha,xe2,0)
         #calculo de P e E
         #calculo de N   
-        Hd2  = dualHamiltonOp(Mhd[:,i].reshape((8,1)),0)
+        Hd2  = dualHamiltonOp(Mhd2[:,i].reshape((8,1)),0)
         # prod1= np.dot(Hd2,C8)
         N2  = Hd2@C8@Ja2
         
@@ -228,7 +228,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #calculo do erro
         e2  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) -  dualQuatMult(dualQuatConj(ha2),Mhd2[:,i].reshape((8,1)))
 
-        vec2 = dualQuatMult(dualQuatConj(ha2),Mhd2[:,i].reshape((8,1)))
+        vec2 = dualQuatMult(dualQuatConj(ha2),Mdhd2[:,i].reshape((8,1)))
         #do2 = np.zeros(20,20)
         do2 = Np2@(K2@e2-vec2)
         #od2 = np.zeros(100)

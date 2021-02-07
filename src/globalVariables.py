@@ -38,8 +38,8 @@ class GlobalVariables:
     m = 3.5 #Darwin
     #L = 0.63 #tamanho da perna em relação ao CoM Hubo
     #L = 0.244 #darwin's leg size
-    #L = 0.204
-    L = 0.22276
+    L = 0.204
+    #L = 0.22276
     g = 9.8 
     h = 10**(-6) #passo para o calculo das derivadas
     maxNGrad = 10**6 #número máximo de iterações método

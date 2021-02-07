@@ -102,7 +102,6 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #se i<ind, o robô ainda não atingiu a posição de td, então a transformação é calculada em relação ao pé
 	    #quando o robô chega na fase de TD, a transformação é calculada em relação ao CoM
         if i <ind:
-            
             p = np.array([0, trajPB1[i,0], trajPB1[i,1],trajPB1[i,2]]).reshape((4,1))
             n = np.array([0, 1, 0])
             #angulo = mt.pi/2.0 #graus ou radianos????????????????????????????????????????????????????????????/
@@ -187,7 +186,7 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #inicio do controlador
         #hB_O6a = dualQuatMult(hOrg,hP)
         xe = KinematicModel(MDH,theta,6,0)
-        Ja = jacobiano2(theta,hOrg,hP,xe) #jacobiano para a perna direita
+        Ja = jacobiano2(theta,hOrg,hP,xe,0) #jacobiano para a perna direita
         # Ja = jacobianoCinematica(theta,hOrg,hP,1,1)
         #calculo de P e E
         #calculo de N   
@@ -213,9 +212,9 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
 
 		#o movimento dos motores é limitado entre pi/2 e -pi/2, então, se theta estiver
 		#fora do intervalo, esse for faz theta = limite do intervalo
-        for j in range(0,6,1):
-            if abs(theta[j,0]) > hpi:
-                theta[j,0] = np.sign(theta[j,0])*hpi
+        # for j in range(0,6,1):
+        #     if abs(theta[j,0]) > hpi:
+        #         theta[j,0] = np.sign(theta[j,0])*hpi
 
         ha  = kinematicRobo(theta,hOrg,hP,1,1)  #não deveria ser hd?????????????????????????????????????????
 
@@ -247,7 +246,7 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #inicio do controlador  
         #hB_O6a = dualQuatMult(hOrg,hP)
         xe2 = kinematicRobo(theta,hOrg,hP,1,0)
-        Ja2 = jacobianoPes(theta,ha,xe2)
+        Ja2 = jacobianoPes(theta,ha,xe2,1)
         #Ja2 = jacobianoCinematica(theta,hOrg,hP,1,0)
         #calculo de P e E
         #calculo de N  
@@ -272,9 +271,9 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         od2  = (do2*dt)/2
         for j in range(6):
             theta[j,1] = theta[j,1] + od2[j,0]
-        for j in range (0,6,1):
-            if abs(theta[j,1]) > hpi:
-                theta[j,1] = np.sign(theta[j,1])*hpi
+        # for j in range (0,6,1):
+        #     if abs(theta[j,1]) > hpi:
+        #         theta[j,1] = np.sign(theta[j,1])*hpi
 		
         ha2  = kinematicRobo(theta,hOrg,hP,1,0)
         
