@@ -5,6 +5,8 @@ from dualQuatDH import dualQuatDH
 from kinematicModel import KinematicModel
 from globalVariables import GlobalVariables
 from dualQuatConj import dualQuatConj
+from quatNorm import quatNorm
+from quatScale import quatScale
 
 def kinematicRobo(theta,hOrg,hP,tipo,CoM):
     #--------------------------------------
@@ -76,5 +78,6 @@ def kinematicRobo(theta,hOrg,hP,tipo,CoM):
             hB_O0 = dualQuatMult(hB_CoM,hCoM_O0_rightLeg)
             hO0_O6 = KinematicModel(MDH,thetar,6,1)
             hr = dualQuatMult(hB_O0,hO0_O6)
+
 
     return hr    

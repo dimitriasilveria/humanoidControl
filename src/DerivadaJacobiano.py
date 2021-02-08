@@ -103,7 +103,7 @@ def DerivadaJacobiano(theta,hOrg,hP,tipo,CoM,ind):
     
 
     r = getRotationDualQuat(q1)
-    normq = np.linalg.norm(r)
+    #normq = np.linalg.norm(r)
     
     # if normq != 0:
     #    q1 = q1/(normq)

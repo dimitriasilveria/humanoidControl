@@ -10,11 +10,10 @@ from quatScale import quatScale
 from quatNorm import quatNorm
 def getRotationDualQuat(q):
      normq = quatNorm(q)
-     if normq == 0:
-          qr = q
-     else:
-          qr = quatScale(1.0 / normq, q)
+        
+     if normq != 0:
+       q1 = q1/(normq)
 
-     r = np.array([qr[0,0], qr[1,0], qr[2,0], qr[3,0]]).reshape((4,1))
+     r = np.array([q1[0,0], q1[1,0], q1[2,0], q1[3,0]]).reshape((4,1))
      return r
 
