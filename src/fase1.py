@@ -139,6 +139,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
     Q = ganhoQ*np.eye(8)
     R = ganhoR*np.eye(8)
     Rinv = np.linalg.inv(R)
+    # print('R::',Rinv)
+    # return
     ab = np.array([1, -1,-1, -1, 1, -1, -1,-1])
     C8 = np.diag(ab)
 
@@ -164,12 +166,12 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         aux = dualQuatMult(dualQuatConj(mhd),mdhd)
         A  = dualHamiltonOp(aux,0)
         c = -aux
-        prod2 = np.dot(P,Rinv)
-        P = P -dt*(-np.dot(P,A) - np.dot(A.T,P) + np.dot(prod2,P) - Q)
+        # prod2 = np.dot(P,Rinv)
+        P = P -(-P@A -A.T@P + P@Rinv@P - Q)*dt
         for j in range(8):
             for k in range(8):
                 MP2[j,k,i] = P[j,k]
-        E = E - (-np.dot(A.T,E) + np.dot(prod2,E) - np.dot(P,c))*dt
+        E = E - ((-1)*(A.T)@E + P@Rinv@E - P@c)*dt
         for j in range(8):
             ME2[j,i] = E[j,0]
   
@@ -191,24 +193,23 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #calculo de P e E
         #calculo de N   
         Hd  = dualHamiltonOp(mhd,0)
-        prod3 = np.dot(Hd,C8)
-        N  = np.dot(prod3,Ja)
+        # prod3 = np.dot(Hd,C8)
+        N  = Hd@C8@Ja
         #pseudo inversa de N
         Np  = np.linalg.pinv(N)
 
         #calculo do erro
         e  = np.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]).reshape((8,1)) - dualQuatMult(dualQuatConj(ha),mhd)
         #calculo de P e E
-        for j in range(8):
-            E[j,0] = ME2[j,i]
-        #P = np.reshape(MP2[:,i],np.shape(A))
-        Pxe= np.dot(P,e)
-        NpxRinv= np.dot(Np,Rinv)  
-        do = np.dot(NpxRinv,(Pxe + E)) #equação final para theta ponto
+
+        E[:,0] = ME2[:,i]
+        P[:,:] = MP2[:,:,i].reshape((8,8))
+        #Pxe= np.dot(P,e)
+        #do = Np@Rinv@(P@e + E) 
+        do = Np@Rinv@(P@e + E) #equação final para theta ponto
         #calculo do theta deseja
         od  = (do*dt)/2
-        for j in range(6):
-            theta[j,0] = theta[j,0] + od[j,0]
+        theta[:,0] = theta[:,0] + od[:,0]
 
 		#o movimento dos motores é limitado entre pi/2 e -pi/2, então, se theta estiver
 		#fora do intervalo, esse for faz theta = limite do intervalo

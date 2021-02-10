@@ -22,22 +22,24 @@ def kinematicRobo(theta,hOrg,hP,tipo,CoM):
     hpi = glob.getHpi()
     L1 = glob.getL1()
     L2 = glob.getL2()
-    height = glob.getHeight()
+    #height = glob.getHeight()
     MDH = glob.getMDH()
     #------------------------------------------------------------------------------------------------
-    l = np.size(theta[:,0],0)
-    r = np.size(theta[:,1],0)
+    # l = np.size(theta[:,0],0)
+    # r = np.size(theta[:,1],0)
     
-    thetar = np.zeros((l,1))
-    thetal = np.zeros((r,1))
-    for i in range(r):
-        thetar[i,0] = theta[i,0]
-    for i in range(l):
-        thetal[i,0] = theta[i,1]
+    # thetar = np.zeros((l,1))
+    # thetal = np.zeros((r,1))
+    thetar = theta[:,0].reshape((6,1))
+    thetal = theta[:,1].reshape((6,1))
+    # for i in range(r):
+    #     thetar[i,0] = theta[i,0]
+    # for i in range(l):
+    #     thetal[i,0] = theta[i,1]
     
-    a3 = 6
-    a4 = a3
-    a5 = 2
+    # a3 = 6
+    # a4 = a3
+    # a5 = 2
     
     #MDH = np.array([[0,      0,   0,    np.pi/2],  # do fixo pro 0           (sobre o motthetar1)
     #               [-np.pi/2,   0,   0,   -np.pi/2],  # motthetar1 do frame 0 pro 1(sobre o motthetar2)

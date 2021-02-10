@@ -410,7 +410,7 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
     ME2[:,T-1] = E[:,0]
 
    
-    for i in range(T-2,0,-1):
+    for i in range(T-2,-1,-1):
         #for j in range(8):
         mhdPlus[:,0] = Mhd[:,i+1]
         mdhdPlus[:,0] = Mdhd[:,i+1]
@@ -459,6 +459,7 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         #calculo de P e E
         #for j in range(8):
         E[:,0] = ME2[:,i]
+        P[:,:] = MP2[:,:,i].reshape((8,8))
         #P = np.reshape(MP2[:,i],np.shape(A))
         # Pxe= np.dot(P,e)   
         # NpxRinv= np.dot(Np,Rinv)  
@@ -512,9 +513,9 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         Np2  = np.linalg.pinv(N2)
         
         #calculo do erro
-        e2  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) - dualQuatMult(dualQuatConj(ha2),mhd2)
+        e2  = np.array([1, 0, 0, 0, 0, 0, 0, 0]).reshape((8,1)) - dualQuatMult(dualQuatConj(ha2),Mhd2[:,i].reshape((8,1)))
 
-        vec2 = dualQuatMult(dualQuatConj(ha2),mdhd2)
+        vec2 = dualQuatMult(dualQuatConj(ha2),Mhd2[:,i].reshape((8,1)))
         #
         #produto= np.dot(K2,e2-vec2)
         do2 = Np2@(K2@e2-vec2)
@@ -528,13 +529,13 @@ def fase3(ha,ha2,trajCoM,ind,trajPB,theta,t1,vecGanho):
         Mha2[:,i] = ha2[:,0]
         #posição
         pos2 = getPositionDualQuat(ha2)
-        posd2 = getPositionDualQuat(mhd2)
+        posd2 = getPositionDualQuat(Mhd2[:,i].reshape((8,1)))
         for j in range(3):
             Pos2[j,i]  = pos2[j,0]
             Posd2[j,i] = posd2[j,0]
         #orientação
         ra = getRotationDualQuat(ha2)
-        rd = getRotationDualQuat(mhd2)
+        rd = getRotationDualQuat(Mhd2[:,i].reshape((8,1)))
         co = mt.acos(ra[0,0])
         angle2[i] = co
         co = mt.acos(rd[0,0])

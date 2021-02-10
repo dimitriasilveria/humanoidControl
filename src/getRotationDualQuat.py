@@ -12,8 +12,8 @@ def getRotationDualQuat(q):
      normq = quatNorm(q)
         
      if normq != 0:
-       q1 = q1/(normq)
+       q = q/(normq)
 
-     r = np.array([q1[0,0], q1[1,0], q1[2,0], q1[3,0]]).reshape((4,1))
+     r = np.array([q[0,0], q[1,0], q[2,0], q[3,0]]).reshape((4,1))
      return r
 

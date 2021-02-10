@@ -144,12 +144,10 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
     mhd = np.zeros((8,1))
     mdhd = np.zeros((8,1))
 
-    for i in range(T-2,0,-1):   
+    for i in range(T-2,-1,-1):   
         #for j in range(8):
         #mhdPlus[:,0] = Mhd[:,i+1]
         #mdhdPlus[:,0] = Mdhd[:,i+1]
-        mhd[:,0] = Mhd[:,i]
-        mdhd[:,0] = Mdhd[:,i] 
         aux = dualQuatMult(dualQuatConj(Mhd[:,i+1].reshape((8,1))),Mdhd[:,i+1].reshape((8,1)))
         A  = dualHamiltonOp(aux,0)
         c = -aux
@@ -158,7 +156,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         for j in range(8):
             for k in range(8):
                 MP2[j,k,i] = P[j,k]
-        E = E - ((-1)*(A.T)@E + P@Rinv@E - P@c)*dt
+        E = E - (-1*(A.T)@E + P@Rinv@E - P@c)*dt
         #for j in range(8):
         ME2[:,i] = E[:,0]
     
@@ -176,7 +174,8 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #inicio do controlador  
         #Ja = jacobianoCinematica(theta,hOrg,hP,0,1)
         xe = KinematicModel(MDH,theta,6,0)
-        Ja = jacobiano2(theta,hOrg,hP,xe,1)   
+        Ja = jacobiano2(theta,hOrg,hP,xe,1) 
+
         #calculo de P e E
         #calculo de N   
         Hd  = dualHamiltonOp(Mhd[:,i].reshape((8,1)),0)
@@ -191,12 +190,13 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #for j in range(8):
         E[:,0] = ME2[:,i]
         #P = np.reshape(MP2[:,i],np.shape(A))
+        P[:,:] = MP2[:,:,i].reshape((8,8))
         do = Np@Rinv@(P@e + E)
         #calculo do o deseja
         od  = dt*do/2    
         #for j in range(6):
-        theta[:,1] = theta[:,1] + od[:,0] 
-
+        theta[:,1] = theta[:,1] + od[:,0]
+ 
         # for j in range(1,6,1):
         #     if abs(theta[j,1]) > hpi:
         #         theta[j,1] = np.sign(theta[j,1])*hpi
@@ -204,8 +204,8 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
 
         #controlador 2
         #calculo de A e c
-        mdhd2 = np.zeros((8,1))
-        mhd2 = np.zeros((8,1))
+        # mdhd2 = np.zeros((8,1))
+        # mhd2 = np.zeros((8,1))
         #for j in range(8):
         # mdhd2[:,0] = Mdhd2[:,i]
         # mhd2[:,0] = Mhd2[:,i]
@@ -232,7 +232,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #do2 = np.zeros(20,20)
         do2 = Np2@(K2@e2-vec2)
         #od2 = np.zeros(100)
-        od2 = do2*dt
+        od2 = do2*dt/2
         #for j in range(6):
         theta[:,0] = theta[:,0] + od2[:,0]
         
@@ -243,7 +243,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         Mha[:,i] = ha[:,0]
         #posição
         pos = getPositionDualQuat(ha)
-        posd = getPositionDualQuat(mhd)
+        posd = getPositionDualQuat(Mhd[:,i].reshape((8,1)))
         #for j in range(3):
         Pos[:,i]  = pos[:,0]
         Posd[:,i] = posd[:,0]
