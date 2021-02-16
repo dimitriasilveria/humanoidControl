@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" modified="2021-02-10T21:00:38.593Z" agent="5.0 (X11)" etag="ftG-qTQ9J7HcM7y9f60s" version="14.3.0" type="github">
+  <diagram id="atlGS35OzI4mRYbf53O9" name="Page-1">
+    <mxGraphModel dx="1350" dy="804" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="WOb0AENOogrFLb715Xbs-1" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="110" y="110" width="420" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-2" value="main controle" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="314" y="150" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WOb0AENOogrFLb715Xbs-3" target="WOb0AENOogrFLb715Xbs-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-3" value="&lt;div&gt;trajectories&lt;/div&gt;&lt;div&gt;(start, phase 1 and phase2)&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="200" width="130" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-4" value="phase 1 + phase 2 + phase 3" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="345" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="WOb0AENOogrFLb715Xbs-11" target="WOb0AENOogrFLb715Xbs-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-11" value="ros topic + publisher" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-14" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="155" y="555" width="430" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-15" value="phase 1+ phase 2 + phase 3" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="575" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.375;entryY=0.033;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WOb0AENOogrFLb715Xbs-16" target="WOb0AENOogrFLb715Xbs-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.417;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WOb0AENOogrFLb715Xbs-16" target="WOb0AENOogrFLb715Xbs-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-16" value="Mhd calculation" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="630" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="WOb0AENOogrFLb715Xbs-17" target="WOb0AENOogrFLb715Xbs-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-17" value="Proportional Controller" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="740" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-18" value="LQR" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="740" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WOb0AENOogrFLb715Xbs-21" value="publish theta" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="860" width="120" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
