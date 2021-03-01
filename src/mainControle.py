@@ -57,7 +57,7 @@ U0 = np.zeros((5,1))
 #Darwin
 xod  = 0.00
 yod  = 0.035
-zod  = 0.244
+zod  = 0.22
 dxod = 0.24
 dyod = 0.00
 dzod = 0.00
@@ -89,14 +89,13 @@ ganhoS1 = 0
 
 ganhoQ1 = 20
 ganhoR1 = 0.00001
-ganhoK1 = 10000
+ganhoK1 = 9000
 
 #Ganhos LQR (perna esquerda) e proporcional (perna direita)
 ganhoS2 = 0
 ganhoQ2 = 20
 ganhoR2 = 0.00001
-ganhoK2 = 10000
-
+ganhoK2 = 9000
 #quantidade de passos
 quatidadePassos = 3
 #-----------------------------------------------------------

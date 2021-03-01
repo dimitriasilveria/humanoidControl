@@ -24,6 +24,8 @@ from jacobianoCoM import jacobiano2
 from kinematicModel import KinematicModel
 from jacobianoPes import jacobianoPes
 from trajetoriaPesInicio import trajetoriaPesInicio
+import scipy
+from scipy import linalg
 #from publisher import angles
 
 def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
