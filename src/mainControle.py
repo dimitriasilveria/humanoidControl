@@ -86,7 +86,6 @@ Bss = 0.0414743461
 
 #Ganhos LQR (perna direita) e proporcional (perna esquerda)
 ganhoS1 = 0
-
 ganhoQ1 = 20
 ganhoR1 = 0.00001
 ganhoK1 = 9000

@@ -24,8 +24,8 @@ class GlobalVariables:
     si = np.array([hpi, -hpi, 0.0, 0.0, hpi, 0.0]).reshape((6,1))
     ori = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0]).reshape((6,1)) #perna direita
     ol = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0]).reshape((6,1)) #perna esquerda
-    # ori = np.array([1.54500947e-13, 1.31062657e-04, 7.69045984e-05, -5.43909054e-08, -7.70133802e-05, -5.30177333e-06]).reshape((6,1)) #perna direita
-    # ol = np.array([1.54500947e-13, 1.31062657e-04, 7.69045984e-05, -5.43909054e-08, -7.70133802e-05, -5.30177333e-06]).reshape((6,1)) #perna esquerda
+    # ori = np.array([0.0, 0.0, 0.5146, 2.1122, 0.5147, 0.0]).reshape((6,1)) #perna direita
+    # ol = np.array([0.0, 0.0, 0.5146, 2.1122, 0.5147, 0.0]).reshape((6,1)) #perna esquerda
     MDH = np.zeros((6,4))
     for j in range(6):
         MDH[j,0] = oi[j,0]

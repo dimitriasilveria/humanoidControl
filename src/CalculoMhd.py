@@ -4,7 +4,7 @@ from transformacao import transformacao
 from dualQuatMult import dualQuatMult
 from kinematicRobo import kinematicRobo
 
-def calculoMhd(trajCoM,theta,trajP):
+def calculoMhd(trajCoM,theta,trajP, phase):
 
     glob = GlobalVariables()
     hEdo = glob.getHEDO()
@@ -30,12 +30,8 @@ def calculoMhd(trajCoM,theta,trajP):
    
 	#dt é o tempo da solução da equação Edo e, ao mesmo tempo, o passo
     T = np.size(trajCoM,0) #o tamanho de trajCoM = ind
+    tempo = (T-1)*dt #o tempo é o produto da quantidade de iterações necessárias para calcular a trajetória do CoM
 
-    #T = 100;
-    #tempo = (T-1)*dt #o tempo é o produto da quantidade de iterações necessárias para calcular a trajetória do CoM
-    tempo = (T-1)*dt
-    #pelo tamanho do intervalo de tempo(passo)
-    #t = 1:1:T;
 
     #matrizes e vetores auxiliares
     Mhd = np.zeros((8,T))
@@ -96,5 +92,16 @@ def calculoMhd(trajCoM,theta,trajP):
     for i in range (1,T,1):
         Mdhd[:,i] = (Mhd[:,i] - Mhd[:,i-1])*(1/dt) #por que ele fazer isso????????????????????????????????????????????????????
         Mdhd2[:,i]  =  (Mhd2[:,i] - Mhd2[:,i-1])*(1/dt) #derivada de hd, que é a posição desejada        
-
-    return Mhd, Mhd2, Mdhd, Mdhd2, tempo     
+    
+    switch (phase) {
+        case 1:  
+            ha = kinematicRobo(theta,hOrg,hP,1,1) #cinemática do pé esquerdo até o CoM
+            ha2 = kinematicRobo(theta,hOrg,hP,1,0) #cinemática de um pé até o outro
+            break
+        case 2: 
+            hP = ha2
+            ha2 = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
+        case 3:
+            hP = ha2
+    }
+    return ha, ha2, Mhd, Mhd2, Mdhd, Mdhd2, tempo, hP     

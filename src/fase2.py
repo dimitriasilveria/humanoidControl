@@ -232,7 +232,7 @@ def fase2(ha,ha2,trajCoM,ind,trajPA,theta,t1,vecGanho):
         #do2 = np.zeros(20,20)
         do2 = Np2@(K2@e2-vec2)
         #od2 = np.zeros(100)
-        od2 = do2*dt/2
+        od2 = (do2*dt)/2
         #for j in range(6):
         theta[:,0] = theta[:,0] + od2[:,0]
         
