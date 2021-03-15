@@ -252,7 +252,7 @@ while not rospy.is_shutdown():
         angle.data = Vr[0,0] #escrevendo Vr[0] em angle
         p1.publish(angle) #publicando angle
         print("publicando", Vr)
-        angle.data = Vr[1,0]
+        angle.data = 0.05
         p2.publish(angle)
 
         angle.data = Vr[2,0]

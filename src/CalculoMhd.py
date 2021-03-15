@@ -13,7 +13,7 @@ def calculoMhd(trajCoM,theta,trajP, phase):
     #MDH = glob.getMDH()
     hpi = glob.getHpi()
 
-    ind = np.size(trajCoM)
+    ind = np.size(trajP,0)
         
     hOrg = np.array([[1],[0], [0], [0], [0], [0], [0], [0]]) #posição da base
     dt = hEdo 
@@ -38,10 +38,9 @@ def calculoMhd(trajCoM,theta,trajP, phase):
     Mha = np.zeros((8,T))
     Mdhd = np.zeros((8,T))
     Mtheta = np.zeros((6,T))
-    Mhd = np.zeros((8,1))
-    Mdhd = np.zeros((8,1))
-    Mhd2 = np.zeros((8,1))
-    Mdhd2 = np.zeros((8,1))
+    Mdhd = np.zeros((8,T))
+    Mhd2 = np.zeros((8,T))
+    Mdhd2 = np.zeros((8,T))
 
     # Mhd2 = np.zeros((8,T))
     # Mha2 = np.zeros((8,T))
@@ -67,8 +66,7 @@ def calculoMhd(trajCoM,theta,trajP, phase):
         r = np.array([1, 0, 0, 0]).reshape((4,1))
         hd = transformacao(p,r)
         hd = dualQuatMult(hB1,hd)
-        for j in range(8):
-            Mhd[j,i] = hd[j,0]
+        Mhd[:,i] = hd[:,0]
         #transformação da base até o centro de massa
         #se i<ind, o robô ainda não atingiu a posição de td, então a transformação é calculada em relação ao pé
 	    #quando o robô chega na fase de TD, a transformação é calculada em relação ao CoM
@@ -80,8 +78,7 @@ def calculoMhd(trajCoM,theta,trajP, phase):
             rb =  np.concatenate((realRb,np.sin(thetab/2)*n), axis = 0).reshape((4,1))  
             hd = transformacao(p,rb) #posição desejada
             hd = dualQuatMult(hB1,hd)#transformação da base até o pé
-            for j in range(8):
-                Mhd2[j,i] = hd[j,0]
+            Mhd2[:,i] = hd[:,0]
         else:
             Mhd2[:,i] = Mhd2[:,ind-1]
   
@@ -93,15 +90,10 @@ def calculoMhd(trajCoM,theta,trajP, phase):
         Mdhd[:,i] = (Mhd[:,i] - Mhd[:,i-1])*(1/dt) #por que ele fazer isso????????????????????????????????????????????????????
         Mdhd2[:,i]  =  (Mhd2[:,i] - Mhd2[:,i-1])*(1/dt) #derivada de hd, que é a posição desejada        
     
-    switch (phase) {
-        case 1:  
-            ha = kinematicRobo(theta,hOrg,hP,1,1) #cinemática do pé esquerdo até o CoM
-            ha2 = kinematicRobo(theta,hOrg,hP,1,0) #cinemática de um pé até o outro
-            break
-        case 2: 
-            hP = ha2
-            ha2 = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
-        case 3:
-            hP = ha2
-    }
-    return ha, ha2, Mhd, Mhd2, Mdhd, Mdhd2, tempo, hP     
+    if phase == 1:
+        ha = kinematicRobo(theta,hOrg,hP,1,1) #cinemática do pé esquerdo até o CoM
+        ha2 = kinematicRobo(theta,hOrg,hP,1,0) #cinemática de um pé até o outro
+    else:
+        ha = ha2 = np.zeros((8,1))
+    
+    return ha, ha2, hP, Mhd, Mhd2, Mdhd, Mdhd2, tempo    

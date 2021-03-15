@@ -290,9 +290,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         # for j in range (0,6,1):
         #     if abs(theta[j,1]) > hpi:
         #         theta[j,1] = np.sign(theta[j,1])*hpi
-		
         ha2  = kinematicRobo(theta,hOrg,hP,1,0)
-        
+        print(theta)
         #plotar os dados
         Mha2[:,i]  = ha2[:,0]
         #posição

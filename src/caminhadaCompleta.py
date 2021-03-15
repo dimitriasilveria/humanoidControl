@@ -79,7 +79,7 @@ vecGanho1 = np.array([ganhoS1, ganhoQ1, ganhoR1, ganhoK1]).reshape((4,1))
 vecGanho2 = np.array([ganhoS2, ganhoQ2, ganhoR2, ganhoK2]).reshape((4,1))
 
 #trajetoria 1
-[trajPB1, trajPB, trajPA, trajCoM1, trajCoM2, trajCoM3, passoTrajCoM, passoComprimento] = trajetoria(U0,X0)
+#[trajPB1, trajPB, trajPA, trajCoM1, trajCoM2, trajCoM3, passoTrajCoM, passoComprimento] = trajetoria(U0,X0)
 #trajetoria 2
 CoM = trajCoM1
 print(np.size(trajCoM1))
@@ -162,8 +162,8 @@ passos = 1
 trajCoM = trajCoM1
 trajP = trajPB1
 T = np.size(trajCoM,0) #o tamanho de trajCoM = ind
-[ha, ha2, Mhd, Mhd2, Mdhd, Mdhd2, tempo1, hP] = calculoMhd(trajCoM,theta,trajP) 
-[ha, ha2, theta, Mtheta, Mtheta2] = controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho2,T,phase,publishers,angle)
+[ha, ha2, hP,Mhd, Mhd2, Mdhd, Mdhd2, tempo1] = calculoMhd(trajCoM,theta,trajP,phase) 
+[ha, ha2, theta, Mtheta, Mtheta2] = controles(theta,ha,ha2,hP,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho2,T,phase,publishers)
 
 tempo = tempo+tempo1
 i = 0   
@@ -184,8 +184,8 @@ while not rospy.is_shutdown():
     trajP[:,0] = trajP[:,0]+ i*2*passoComprimento
     phase = 2
     passos = passos + 1
-    [ha, ha2, Mhd, Mhd2, Mdhd, Mdhd2, tempo2, hP] = calculoMhd(trajCoM,theta,trajP) 
-    [ha, ha2, theta, Mtheta, Mtheta2] = controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho2,T,phase,publishers,angle)
+    [haInutil, ha2Inutil,hP, Mhd, Mhd2, Mdhd, Mdhd2, tempo2] = calculoMhd(trajCoM,theta,trajP,phase) 
+    [ha, ha2, theta, Mtheta, Mtheta2] = controles(theta,ha,ha2,hP,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho2,T,phase,publishers)
     # [ha,ha2,theta,tempo2,Mtheta, Mtheta2] = fase2(ha,ha2,trajCoM,np.size(trajPA,0),trajP,theta,tempo,vecGanho2)
     if passos >=quatidadePassos: #é a quantidade de passos da trajetória desejada
         break
@@ -207,8 +207,8 @@ while not rospy.is_shutdown():
     #[PA,PB,PC,trajCoM,indContadoPe] = trajetoria(un,xn)
     phase = 3   
     passos = passos + 1
-    [ha, ha2, Mhd, Mhd2, Mdhd, Mdhd2, tempo3, hP] = calculoMhd(trajCoM,theta,trajP) 
-    [ha, ha2, theta, Mtheta, Mtheta2] = controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho2,T,phase,publishers,angle)
+    [haInutil, ha2Inutil, hP, Mhd, Mhd2, Mdhd, Mdhd2, tempo3] = calculoMhd(trajCoM,theta,trajP,phase) 
+    [ha, ha2, theta, Mtheta, Mtheta2] = controles(theta,ha,ha2,hP,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho2,T,phase,publishers)
     if passos >=quatidadePassos:
         break
     

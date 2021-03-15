@@ -11,14 +11,24 @@ from jacobianoCoM import jacobiano2
 from globalVariables import GlobalVariables
 from kinematicModel import KinematicModel
 import rospy
+from std_msgs.msg import Float64
 
 import math as mt
 
-def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers,angle):
+def controles(theta,ha,ha2,hP,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers):
 
+    if phase == 2: 
+        hP = ha2
+        hOrg = np.array([[1],[0], [0], [0], [0], [0], [0], [0]]) #posição da base
+        ha2 = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
+    else:
+        if phase ==3:
+            hP = ha2
     glob = GlobalVariables()
     dt  = glob.getHEDO()
     MDH = glob.getMDH()
+
+    angleMsg = Float64()
 
     mhd = np.zeros((8,1))
     mdhd = np.zeros((8,1))
@@ -35,7 +45,6 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers,a
     Pos2 = np.zeros((3,T))
     Posd2 = np.zeros((3,T))
 
-    Mhd2 = np.zeros((8,T))
     Mha2 = np.zeros((8,T))
     Mha = np.zeros((8,T))
     Mtheta2 = np.zeros((6,T))
@@ -128,7 +137,8 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers,a
         do = Np@Rinv@(P@e + E) #equação final para theta ponto
         #calculo do theta deseja
         od  = (do*dt)/2
-        if(phase == 1 | phase == 3):
+        #print('od', od)
+        if(phase == 1 or phase == 3):
             theta[:,0] = theta[:,0] + od[:,0]
         else:
             theta[:,1] = theta[:,1] + od[:,0]
@@ -138,7 +148,7 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers,a
         # for j in range(0,6,1):
         #     if abs(theta[j,0]) > hpi:
         #         theta[j,0] = np.sign(theta[j,0])*hpi
-        if(phase == 1 | phase == 3):
+        if(phase == 1 or phase == 3):
             ha  = kinematicRobo(theta,hOrg,hP,1,1)  #posição do CoM com perna direita apoiada
         else:
             ha  = kinematicRobo(theta,hOrg,hP,0,1) #posição do CoM com perna esquerda apoiada
@@ -190,57 +200,57 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers,a
         
         vec2 = dualQuatMult(dualQuatConj(ha2),mdhd2)
         #
-        K2xe2 = np.dot(K2,e2)
-        do2 = np.dot(Np2,(K2xe2-vec2))
+        # K2xe2 = np.dot(K2,e2)
+        do2 = Np2@(K2@e2-vec2)
         od2  = (do2*dt)/2
-        if(phase == 1 | phase == 3):
+        if(phase == 1 or phase == 3):
             theta[:,1] = theta[:,1] + od2[:,0]
         else:
             theta[:,0] = theta[:,0] + od2[:,0]
         # for j in range (0,6,1):
         #     if abs(theta[j,1]) > hpi:
         #         theta[j,1] = np.sign(theta[j,1])*hpi
+        print(theta)
+        # publicando os ângulos nas juntas
+        angleMsg.data = theta[0,0]#escrevendo theta[0] em angle
+        publishers[0].publish(angleMsg) #publicando angle
 
-        #publicando os ângulos nas juntas
-        angle.data = theta[0,0] #escrevendo theta[0] em angle
-        publishers[0].publish(angle) #publicando angle
-        print("publicando", theta)
-        angle.data = theta[1,0]
-        publishers[1].publish(angle)
+        angleMsg.data = theta[1,0]
+        publishers[1].publish(angleMsg)
 
-        angle.data = theta[2,0]
-        publishers[2].publish(angle)
+        angleMsg.data = theta[2,0]
+        publishers[2].publish(angleMsg)
 
-        angle.data = theta[3,0]
-        publishers[3].publish(angle)
+        angleMsg.data = theta[3,0]
+        publishers[3].publish(angleMsg)
 
-        angle.data = theta[4,0]
-        publishers[4].publish(angle)
+        angleMsg.data = theta[4,0]
+        publishers[4].publish(angleMsg)
 
-        angle.data = theta[5,0]
-        publishers[5].publish(angle)
+        angleMsg.data = theta[5,0]
+        publishers[5].publish(angleMsg)
 
-        angle.data = theta[0,1]
-        publishers[6].publish(angle)
+        angleMsg.data = theta[0,1]
+        publishers[6].publish(angleMsg)
 
-        angle.data = theta[1,1]
-        publishers[7].publish(angle)
+        angleMsg.data = theta[1,1]
+        publishers[7].publish(angleMsg)
 
-        angle.data = theta[2,1]
-        publishers[8].publish(angle)
+        angleMsg.data = theta[2,1]
+        publishers[8].publish(angleMsg)
 
-        angle.data = theta[3,1]
-        publishers[9].publish(angle)
+        angleMsg.data = theta[3,1]
+        publishers[9].publish(angleMsg)
 
-        angle.data = theta[4,1]
-        publishers[10].publish(angle)
+        angleMsg.data = theta[4,1]
+        publishers[10].publish(angleMsg)
 
-        angle.data = theta[5,1]
-        publishers[11].publish(angle)
+        angleMsg.data = theta[5,1]
+        publishers[11].publish(angleMsg)
 
         rospy.sleep(1)
 		
-        if(phase == 1 | phase == 3):
+        if(phase == 1 or phase == 3):
             ha2  = kinematicRobo(theta,hOrg,hP,1,0)
         else:
             ha2  = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
