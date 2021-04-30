@@ -57,8 +57,8 @@ U0 = np.zeros((5,1))
 #Darwin
 xod  = 0.00
 yod  = 0.035
-zod  = 0.22
-dxod = 0.24
+zod  = 0.22 
+dxod = 0.35
 dyod = 0.00
 dzod = 0.00
 

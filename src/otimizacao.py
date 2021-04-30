@@ -63,6 +63,12 @@ def otimizacao(U,X,tipo,metodo):
         #----------------------------------------------------------
         vt = np.zeros((4,1))  #usado como auxiliar NAG
         Grad = np.zeros((4,1)) #usado como auxiliar adagrad
+
+        [pa,pb,pc,M,ponto] = trajetoria(U,X)     
+        fo = funcaoObjetivo(pa,pb,pc)
+        if fo < 1*10**(-10): 
+            print("Valores já otimizados")
+            return
         
         for j in range(1, maxNGrad,1):
             

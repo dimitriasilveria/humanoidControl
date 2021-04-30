@@ -281,5 +281,5 @@ def controles(theta,ha,ha2,hP,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers):
         #msg = print('#d de  #d | tempo (s): #f',i,T,toc);
         #disp(msg);
     t1 = 0
-    plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
+    #plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
     return ha, ha2, theta, Mtheta, Mtheta2

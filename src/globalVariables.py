@@ -39,7 +39,7 @@ class GlobalVariables:
     #m = 38.1 #hubo
     m = 3.5 #Darwin
     #L = 0.63 #tamanho da perna em relação ao CoM Hubo
-    #L = 0.244 #darwin's leg size
+    #L = 0.2425 #darwin's leg size
     L = 0.204
     #L = 0.22276
     g = 9.8 

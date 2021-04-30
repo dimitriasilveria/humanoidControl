@@ -26,9 +26,11 @@ from jacobianoPes import jacobianoPes
 from trajetoriaPesInicio import trajetoriaPesInicio
 import scipy
 from scipy import linalg
+import time
 #from publisher import angles
 
 def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
+    begin = time.time()
 
     #global hpi, L1, L2, L3, L4, L5, height, MDH, hEdo
     glob = GlobalVariables()
@@ -291,7 +293,6 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #     if abs(theta[j,1]) > hpi:
         #         theta[j,1] = np.sign(theta[j,1])*hpi
         ha2  = kinematicRobo(theta,hOrg,hP,1,0)
-        print(theta)
         #plotar os dados
         Mha2[:,i]  = ha2[:,0]
         #posição
@@ -318,5 +319,7 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #msg = print('#d de  #d | tempo (s): #f',i,T,toc);
         #disp(msg);
     t1 = 0
+    end = time.time()
+    print('execution time:', end - begin)
     plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
     return ha, ha2, theta, tempo, Mtheta, Mtheta2

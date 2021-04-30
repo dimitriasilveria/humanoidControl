@@ -119,7 +119,7 @@ trajCoM3[:,2] =  trajCoM2[range(ind-1,-1,-1),2] #em z não muda
 #-----------------------------------------------------------
 passoComprimento = PB[0,0] #tamanho do passo
 passoLargura     = PB[1,0] #Largura do passo
-passoAltura      = 0.07    #altura de cada passo
+passoAltura      = 0.0    #altura de cada passo
 
 #trajetoria pé B inicial
 tamTrajPeB1 = indContadoPe
@@ -129,7 +129,7 @@ trajPB1 = trajetoriaPesInicio(np.array([[passoComprimento],[passoLargura],[0]]),
 
 passoComprimento2 = PB[0,0] #tamanho do passo
 passoLargura2     = 0 #Largura do passo
-passoAltura2      = 0.07    #altura de cada passo
+passoAltura2      = 0.0   #altura de cada passo
 
 #trajetoria pé A
 tamTrajPa= (np.size(trajCoM1,0)+indContadoPe)/2
