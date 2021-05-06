@@ -14,7 +14,7 @@ import math as mt
 #Retorno:
 #dydt - vetor com primeira e segunda derivada do sistema
 #-----------------------------------------------------------
-def model1(t,Y0,params):
+def LIPM(t,Y0,params):
 
 #-----------------------------------------------------------
 #constantes
@@ -40,8 +40,10 @@ def model1(t,Y0,params):
     f2 = (g/z)*x
     f3 = dy
     f4 = (g/z)*y
+    f5 = Y0[4,0]
+    f6 = Y0[5,0]
  #-----------------------------------------------------------
 #solução
 #-----------------------------------------------------------    
-    dydt = np.array([[f1],[f2],[f3],[f4]])
+    dydt = np.array([[f1],[f2],[f3],[f4],[f5],[f6]])
     return dydt

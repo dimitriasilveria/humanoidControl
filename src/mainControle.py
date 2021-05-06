@@ -58,7 +58,7 @@ U0 = np.zeros((5,1))
 xod  = 0.00
 yod  = 0.035
 zod  = 0.22 
-dxod = 0.35
+dxod = 0.24
 dyod = 0.00
 dzod = 0.00
 
@@ -86,14 +86,13 @@ Bss = 0.0414743461
 
 #Ganhos LQR (perna direita) e proporcional (perna esquerda)
 ganhoS1 = 0
-ganhoQ1 = 20
-ganhoR1 = 0.00001
+ganhoQ1 = 10
+ganhoR1 = 0.000001
 ganhoK1 = 9000
-
 #Ganhos LQR (perna esquerda) e proporcional (perna direita)
 ganhoS2 = 0
-ganhoQ2 = 20
-ganhoR2 = 0.00001
+ganhoQ2 = 10
+ganhoR2 = 0.000001
 ganhoK2 = 9000
 #quantidade de passos
 quatidadePassos = 3

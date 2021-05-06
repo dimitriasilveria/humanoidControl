@@ -3,7 +3,6 @@ import math
 import cmath
 from rungekutta42 import rungeKutta42
 from globalVariables import GlobalVariables
-from rungekuttaLIPM import rungeKuttaLIPM
 #-----------------------------------------------------------
 #Método para calcular a trajetória do modelo dinâmico
 #otimização de um quarto de passo, resolvendo 2 EDOs
@@ -58,10 +57,10 @@ def trajetoria(U,X):
 #Parâmetros para os métodos 
 #-----------------------------------------------------------           
     t = 0   #inicio do tempo  t = 0
-    h = hEdo #passo do método rungekuttaLIMP inicial
+    h = hEdo #passo do método rungeKutta42 inicial
     N = 10000 #número máximo de iterações
     #primeiro metodo
-    sh = h #tamanho do passo para o método rungekuttaLIMP atualizando durante a execução do método
+    sh = h #tamanho do passo para o método rungeKutta42 atualizando durante a execução do método
     
     ind = 0 #contador
 
@@ -85,7 +84,7 @@ def trajetoria(U,X):
 #método numérico para solucionar as equações diferenciais
 #passo a passo
 #----------------------------------------------------------- 
-        y = rungeKuttaLIPM(var,y0,params)
+        y = rungeKutta42(var,y0,params)
 #-----------------------------------------------------------
 #atualizando a condição inicial
 #-----------------------------------------------------------         
@@ -98,7 +97,8 @@ def trajetoria(U,X):
 #verificando a condição de parada posição Z < que Z de touchdown
 #Z de touchdown = L*cos(theta)
 #-----------------------------------------------------------                     
-        if t>=0.068:
+        if y0[4,0] < L*(math.cos(theta)):
+            print(t)          
             break 
         
 #-----------------------------------------------------------
@@ -142,7 +142,7 @@ def trajetoria(U,X):
 #-----------------------------------------------------------
     ind2 = 0
     #traj2 = ind2 + 1
-    sh = h #tamanho do passo para o método rungekuttaLIMP atualizando durante a execução do método
+    sh = h #tamanho do passo para o método rungeKutta42 atualizando durante a execução do método
 #-----------------------------------------------------------
 #vetores auxiliares para guardar a trajetória
 #-----------------------------------------------------------    
@@ -162,7 +162,7 @@ def trajetoria(U,X):
 #método numérico para solucionar as equações diferenciais
 #passo a passo
 #-----------------------------------------------------------
-        y = rungeKuttaLIPM(var,y0,params)
+        y = rungeKutta42(var,y0,params)
 #-----------------------------------------------------------
 #atualizando nova condição inicial
 #-----------------------------------------------------------
@@ -175,7 +175,8 @@ def trajetoria(U,X):
 #verificando a condição de parada posição dZ > 0
 #-----------------------------------------------------------       
         #if v.all():
-        if t>=0.105:
+        if y0[5,0] > 0:
+            print(t)
             break
     
 #-----------------------------------------------------------

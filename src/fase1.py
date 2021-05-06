@@ -138,8 +138,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
     #controlador proporcional
     ganhoK2 = vecGanho[3,0]
     K2 = ganhoK2*np.eye(8)
-    # Ki = 0.00*np.eye(8)
-    # Kd = 0*np.eye(8)
+    Ki = 0.01*np.eye(8)
+    Kd = 2*np.eye(8)
     S = ganhoS*np.eye(8)
     Q = ganhoQ*np.eye(8)
     R = ganhoR*np.eye(8)
@@ -180,8 +180,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         for j in range(8):
             ME2[j,i] = E[j,0]
 
-    # integral = 0
-    # e_previous = 0
+    integral = 0
+    e_previous = 0
   
     for i in range(0,T,1):
         #tic = tm.time()
@@ -267,6 +267,7 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         for j in range(8):
             mhd2[j,0] = Mhd2[j,i] 
             mdhd2[j,0] = Mdhd2[j,i]
+        
         Hd2  = dualHamiltonOp(mhd2,0)
         N2  = Hd2@C8@Ja2
         #pseudo inversa de N
@@ -281,8 +282,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #
         # K2xe2 = np.dot(K2,e2)
         # do2 = np.dot(Np2,(K2xe2-vec2))
-        #integral = integral + e2*dt
-        #do2 = Np2@(K2@e2 + Kd@(e2 - e_previous) + Ki@integral - vec2)
+        integral = integral + e2*dt
+        do2 = Np2@(K2@e2 + Kd@(e2 - e_previous) + Ki@integral - vec2)
         do2 = Np2@(K2@e2-vec2)
         od2  = (do2*dt)/2   
         for j in range(6):

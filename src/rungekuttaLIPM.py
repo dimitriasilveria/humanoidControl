@@ -1,5 +1,4 @@
-from model1 import model1
-from model2 import model2
+from LIPM import LIPM
 import numpy as np 
 #-----------------------------------------------------------
 #método de RungeKutta de 4ª ordem
@@ -12,7 +11,7 @@ import numpy as np
 #yk - nova condição inicial , solução para a EDO para a iteração
 #sh - novo passo ótimo - (nesse caso esta passando o passo fixo, sempre h)
 #-----------------------------------------------------------
-def rungeKutta42(var,y,params):
+def rungeKuttaLIPM(var,y,params):
 #-----------------------------------------------------------
 #parâmetros para o método de rungeKutta
 #-----------------------------------------------------------
@@ -28,14 +27,16 @@ def rungeKutta42(var,y,params):
 #-----------------------------------------------------------
 #cálculo dos parâmetros do método de rungeKutta
 #-----------------------------------------------------------
-    K1 = model1(t,y,params)
-    K2 = model1(t + h/2,y + (h/2)*K1,params)
-    K3 = model1(t + h/2,y + (h/2)*K2,params)
-    K4 = model1(t + h,y + h*K3,params)
+    K1 = LIPM(t,y,params)
+    K2 = LIPM(t + h/2,y + (h/2)*K1,params)
+    K3 = LIPM(t + h/2,y + (h/2)*K2,params)
+    K4 = LIPM(t + h,y + h*K3,params)
 #-----------------------------------------------------------
 #novo valor de yk e o novo passo
 #-----------------------------------------------------------
     yk = y + (h/6)*(K1 + 2*K2 + 2*K3 + K4)
+    yk[4,0] = y[4,0]
+    yk[5,0] = y[5,0]
 
 
     return yk
