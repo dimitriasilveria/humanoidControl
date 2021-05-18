@@ -7,7 +7,6 @@ from trajetoriaPesInicio import trajetoriaPesInicio
 from globalVariables import GlobalVariables
 from CalculoMhd import calculoMhd
 from Controles import controles
-from fase1 import fase1
 
 angle = Float64() #variable that will be published
 
@@ -27,7 +26,7 @@ p8 = rospy.Publisher('/robotis_op3/l_hip_roll_position/command',Float64,queue_si
 p9 = rospy.Publisher('/robotis_op3/l_hip_pitch_position/command',Float64,queue_size=1)
 p10 = rospy.Publisher('/robotis_op3/l_knee_position/command',Float64,queue_size=1)
 p11 = rospy.Publisher('/robotis_op3/l_ank_roll_position/command',Float64,queue_size=1)
-p12= rospy.Publisher('/robotis_op3/r_ank_pitch_position/command',Float64,queue_size=1)
+p12= rospy.Publisher('/robotis_op3/l_ank_pitch_position/command',Float64,queue_size=1)
 publishers = np.array([p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12])
 #-----------------------------------------------------------
 #Obter todas as trajeotrias do CoM
@@ -66,13 +65,13 @@ quatidadePassos = 3
 #Ganhos LQR (perna direita) e proporcional (perna esquerda)
 ganhoS1 = 0
 ganhoQ1 = 20
-ganhoR1 = 0.00001
+ganhoR1 = 0.000001
 ganhoK1 = 9000
 
 #Ganhos LQR (perna esquerda) e proporcional (perna direita)
 ganhoS2 = 0
 ganhoQ2 = 20
-ganhoR2 = 0.00001
+ganhoR2 = 0.000001
 ganhoK2 = 9000
 
 vecGanho1 = np.array([ganhoS1, ganhoQ1, ganhoR1, ganhoK1]).reshape((4,1))
@@ -119,17 +118,17 @@ trajCoM3[:,2] =  trajCoM2[range(ind-1,-1,-1),2] #em z não muda
 #-----------------------------------------------------------
 passoComprimento = PB[0,0] #tamanho do passo
 passoLargura     = PB[1,0] #Largura do passo
-passoAltura      = 0.0    #altura de cada passo
+passoAltura      = 0.02    #altura de cada passo
 
 #trajetoria pé B inicial
 tamTrajPeB1 = indContadoPe
-#trajPB1 = trajetoriaPes(np.array([[passoComprimento],[passoLargura],[0]]),passoComprimento,passoAltura,1,tamTrajPeB1)
-trajPB1 = trajetoriaPesInicio(np.array([[passoComprimento],[passoLargura],[0]]),passoComprimento,passoAltura,tamTrajPeB1)
+trajPB1 = trajetoriaPes(np.array([[passoComprimento],[passoLargura],[0]]),passoComprimento,passoAltura,1,tamTrajPeB1)
+#trajPB1 = trajetoriaPesInicio(np.array([[passoComprimento],[passoLargura],[0]]),passoComprimento,passoAltura,tamTrajPeB1)
 
 
 passoComprimento2 = PB[0,0] #tamanho do passo
 passoLargura2     = 0 #Largura do passo
-passoAltura2      = 0.0   #altura de cada passo
+passoAltura2      = 0.02   #altura de cada passo
 
 #trajetoria pé A
 tamTrajPa= (np.size(trajCoM1,0)+indContadoPe)/2

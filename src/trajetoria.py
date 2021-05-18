@@ -98,7 +98,7 @@ def trajetoria(U,X):
 #verificando a condição de parada posição Z < que Z de touchdown
 #Z de touchdown = L*cos(theta)
 #-----------------------------------------------------------                     
-        if t>=0.068:
+        if t>=0.105:
             break 
         
 #-----------------------------------------------------------
@@ -175,7 +175,7 @@ def trajetoria(U,X):
 #verificando a condição de parada posição dZ > 0
 #-----------------------------------------------------------       
         #if v.all():
-        if t>=0.105:
+        if t>=0.135:
             break
     
 #-----------------------------------------------------------

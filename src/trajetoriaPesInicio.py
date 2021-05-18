@@ -6,7 +6,7 @@ import numpy as np
 def trajetoriaPesInicio(posP,passo,altura,tam):
     
     p0 = np.array([[posP[0,0]],[posP[2,0]]]) + np.array([[-passo],[0]])
-    p1 = np.array([[posP[0,0]],[posP[2,0]]]) + np.array([[-passo/2],[altura/3]])
+    p1 = np.array([[posP[0,0]],[posP[2,0]]]) + np.array([[-passo/3],[altura/3]])
     p2 = np.array([[posP[0,0]],[posP[2,0]]]) 
     
     dt = 1/(tam)

@@ -27,6 +27,7 @@ from trajetoriaPesInicio import trajetoriaPesInicio
 import scipy
 from scipy import linalg
 import time
+import pandas as pd 
 #from publisher import angles
 
 def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
@@ -42,7 +43,7 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
     #L5 = glob.getL5()
     height = glob.getHeight()
     MDH = glob.getMDH()
-    hpi = glob.getHpi()
+    hpi = 0.7*mt.pi
         
     hOrg = np.array([[1],[0], [0], [0], [0], [0], [0], [0]]) #posição da base
     dt = hEdo 
@@ -138,8 +139,8 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
     #controlador proporcional
     ganhoK2 = vecGanho[3,0]
     K2 = ganhoK2*np.eye(8)
-    Ki = 0.01*np.eye(8)
-    Kd = 2*np.eye(8)
+    Ki = 10*np.eye(8)
+    Kd = 10000*np.eye(8)
     S = ganhoS*np.eye(8)
     Q = ganhoQ*np.eye(8)
     R = ganhoR*np.eye(8)
@@ -224,9 +225,9 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
 
 		#o movimento dos motores é limitado entre pi/2 e -pi/2, então, se theta estiver
 		#fora do intervalo, esse for faz theta = limite do intervalo
-        # for j in range(0,6,1):
-        #     if abs(theta[j,0]) > hpi:
-        #         theta[j,0] = np.sign(theta[j,0])*hpi
+        for j in range(0,6,1):
+            if abs(theta[j,0]) > hpi:
+                theta[j,0] = np.sign(theta[j,0])*hpi
 
         ha  = kinematicRobo(theta,hOrg,hP,1,1)  #não deveria ser hd?????????????????????????????????????????
 
@@ -282,17 +283,17 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #
         # K2xe2 = np.dot(K2,e2)
         # do2 = np.dot(Np2,(K2xe2-vec2))
-        integral = integral + e2*dt
-        do2 = Np2@(K2@e2 + Kd@(e2 - e_previous) + Ki@integral - vec2)
+        # integral = integral + e2*dt
+        # do2 = Np2@(K2@e2 + Kd@(e2 - e_previous) + Ki@integral - vec2)
         do2 = Np2@(K2@e2-vec2)
         od2  = (do2*dt)/2   
         for j in range(6):
             theta[j,1] = theta[j,1] + od2[j,0]
         
         # e_previous = e2
-        # for j in range (0,6,1):
-        #     if abs(theta[j,1]) > hpi:
-        #         theta[j,1] = np.sign(theta[j,1])*hpi
+        for j in range (0,6,1):
+            if abs(theta[j,1]) > hpi:
+                theta[j,1] = np.sign(theta[j,1])*hpi
         ha2  = kinematicRobo(theta,hOrg,hP,1,0)
         #plotar os dados
         Mha2[:,i]  = ha2[:,0]
@@ -321,6 +322,13 @@ def fase1(trajCoM1,ind,trajPB1,theta,vecGanho):
         #disp(msg);
     t1 = 0
     end = time.time()
+    Mtheta = Mtheta*180/mt.pi
+    df = pd.DataFrame(Mtheta.T, columns = ['0','1','2','3','4','5'])
+    df.to_csv('thetaRight.csv')
+
+    Mtheta2 = Mtheta2*180/mt.pi
+    df = pd.DataFrame(Mtheta2.T, columns = ['0','1','2','3','4','5'])
+    df.to_csv('thetaLeft.csv')
     print('execution time:', end - begin)
     plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
     return ha, ha2, theta, tempo, Mtheta, Mtheta2
