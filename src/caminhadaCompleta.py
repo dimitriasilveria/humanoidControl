@@ -27,7 +27,7 @@ p8 = rospy.Publisher('/robotis_op3/l_hip_roll_position/command',Float64,queue_si
 p9 = rospy.Publisher('/robotis_op3/l_hip_pitch_position/command',Float64,queue_size=1)
 p10 = rospy.Publisher('/robotis_op3/l_knee_position/command',Float64,queue_size=1)
 p11 = rospy.Publisher('/robotis_op3/l_ank_roll_position/command',Float64,queue_size=1)
-p12= rospy.Publisher('/robotis_op3/r_ank_pitch_position/command',Float64,queue_size=1)
+p12= rospy.Publisher('/robotis_op3/l_ank_pitch_position/command',Float64,queue_size=1)
 publishers = np.array([p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12])
 #-----------------------------------------------------------
 #Obter todas as trajeotrias do CoM
