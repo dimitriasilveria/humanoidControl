@@ -9,13 +9,26 @@ from getRotationDualQuat import getRotationDualQuat
 from getPositionDualQuat import getPositionDualQuat
 from jacobianoCoM import jacobiano2
 from globalVariables import GlobalVariables
+from kinematicModel import KinematicModel
+import rospy
+from std_msgs.msg import Float64
 
 import math as mt
 
-def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
+def controles(theta,ha,ha2,hP,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,phase,publishers):
 
+    if phase == 2: 
+        hP = ha2
+        hOrg = np.array([[1],[0], [0], [0], [0], [0], [0], [0]]) #posição da base
+        ha2 = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
+    else:
+        if phase ==3:
+            hP = ha2
     glob = GlobalVariables()
     dt  = glob.getHEDO()
+    MDH = glob.getMDH()
+
+    angleMsg = Float64()
 
     mhd = np.zeros((8,1))
     mdhd = np.zeros((8,1))
@@ -32,10 +45,10 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
     Pos2 = np.zeros((3,T))
     Posd2 = np.zeros((3,T))
 
-    Mhd2 = np.zeros((8,T))
     Mha2 = np.zeros((8,T))
     Mha = np.zeros((8,T))
     Mtheta2 = np.zeros((6,T))
+    Mtheta = np.zeros((6,T))
     
     #LQR 
     #calculo dos parâmetros
@@ -54,6 +67,7 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
     # return
     ab = np.array([1, -1,-1, -1, 1, -1, -1,-1])
     C8 = np.diag(ab)
+    hOrg = np.array([[1],[0], [0], [0], [0], [0], [0], [0]]) #posição da base
 
     #iniciar condições finais esperadas para P e E
     Pf = S
@@ -99,7 +113,10 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
         #inicio do controlador
         #hB_O6a = dualQuatMult(hOrg,hP)
         xe = KinematicModel(MDH,theta,6,0)
-        Ja = jacobiano2(theta,hOrg,hP,xe,0) #jacobiano para a perna direita
+        if(phase == 1 | phase == 3):
+            Ja = jacobiano2(theta,hOrg,hP,xe,0) #jacobiano para a perna direita
+        else:   
+            Ja = jacobiano2(theta,hOrg,hP,xe,1) 
         # Ja = jacobianoCinematica(theta,hOrg,hP,1,1)
         #calculo de P e E
         #calculo de N   
@@ -120,15 +137,21 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
         do = Np@Rinv@(P@e + E) #equação final para theta ponto
         #calculo do theta deseja
         od  = (do*dt)/2
-        theta[:,0] = theta[:,0] + od[:,0]
+        #print('od', od)
+        if(phase == 1 or phase == 3):
+            theta[:,0] = theta[:,0] + od[:,0]
+        else:
+            theta[:,1] = theta[:,1] + od[:,0]
 
 		#o movimento dos motores é limitado entre pi/2 e -pi/2, então, se theta estiver
 		#fora do intervalo, esse for faz theta = limite do intervalo
         # for j in range(0,6,1):
         #     if abs(theta[j,0]) > hpi:
         #         theta[j,0] = np.sign(theta[j,0])*hpi
-
-        ha  = kinematicRobo(theta,hOrg,hP,1,1)  #não deveria ser hd?????????????????????????????????????????
+        if(phase == 1 or phase == 3):
+            ha  = kinematicRobo(theta,hOrg,hP,1,1)  #posição do CoM com perna direita apoiada
+        else:
+            ha  = kinematicRobo(theta,hOrg,hP,0,1) #posição do CoM com perna esquerda apoiada
 
         #plotar os dados
         for j in range(8):
@@ -177,16 +200,60 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
         
         vec2 = dualQuatMult(dualQuatConj(ha2),mdhd2)
         #
-        K2xe2 = np.dot(K2,e2)
-        do2 = np.dot(Np2,(K2xe2-vec2))
+        # K2xe2 = np.dot(K2,e2)
+        do2 = Np2@(K2@e2-vec2)
         od2  = (do2*dt)/2
-        for j in range(6):
-            theta[j,1] = theta[j,1] + od2[j,0]
+        if(phase == 1 or phase == 3):
+            theta[:,1] = theta[:,1] + od2[:,0]
+        else:
+            theta[:,0] = theta[:,0] + od2[:,0]
         # for j in range (0,6,1):
         #     if abs(theta[j,1]) > hpi:
         #         theta[j,1] = np.sign(theta[j,1])*hpi
+        print(theta)
+        # publicando os ângulos nas juntas
+        angleMsg.data = theta[0,0]#escrevendo theta[0] em angle
+        publishers[0].publish(angleMsg) #publicando angle
+
+        angleMsg.data = theta[1,0]
+        publishers[1].publish(angleMsg)
+
+        angleMsg.data = theta[2,0]
+        publishers[2].publish(angleMsg)
+
+        angleMsg.data = theta[3,0]
+        publishers[3].publish(angleMsg)
+
+        angleMsg.data = theta[4,0]
+        publishers[4].publish(angleMsg)
+
+        angleMsg.data = theta[5,0]
+        publishers[5].publish(angleMsg)
+
+        angleMsg.data = theta[0,1]
+        publishers[6].publish(angleMsg)
+
+        angleMsg.data = theta[1,1]
+        publishers[7].publish(angleMsg)
+
+        angleMsg.data = theta[2,1]
+        publishers[8].publish(angleMsg)
+
+        angleMsg.data = theta[3,1]
+        publishers[9].publish(angleMsg)
+
+        angleMsg.data = theta[4,1]
+        publishers[10].publish(angleMsg)
+
+        angleMsg.data = theta[5,1]
+        publishers[11].publish(angleMsg)
+
+        rospy.sleep(1)
 		
-        ha2  = kinematicRobo(theta,hOrg,hP,1,0)
+        if(phase == 1 or phase == 3):
+            ha2  = kinematicRobo(theta,hOrg,hP,1,0)
+        else:
+            ha2  = kinematicRobo(theta,hOrg,hP,0,0) #posição da perna direita
         
         #plotar os dados
         Mha2[:,i]  = ha2[:,0]
@@ -214,5 +281,5 @@ def controles(theta,hP,ha,ha2,Mhd2, Mdhd2,Mhd,Mdhd,vecGanho,T,fase):
         #msg = print('#d de  #d | tempo (s): #f',i,T,toc);
         #disp(msg);
     t1 = 0
-    plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
-    return ha, ha2, theta, tempo, Mtheta, Mtheta2
+    #plotGraficosControle(t1,dt,T,Pos,Posd,angle,angled,Mha,Mhd,Mtheta,Pos2,Posd2,angle2,angled2,Mha2,Mhd2,Mtheta2,'b','r')
+    return ha, ha2, theta, Mtheta, Mtheta2

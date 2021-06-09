@@ -4,7 +4,7 @@ from transformacao import transformacao
 from dualQuatMult import dualQuatMult
 from kinematicRobo import kinematicRobo
 
-def calculoMhd(trajCoM,theta,trajP):
+def calculoMhd(trajCoM,theta,trajP, phase):
 
     glob = GlobalVariables()
     hEdo = glob.getHEDO()
@@ -13,7 +13,7 @@ def calculoMhd(trajCoM,theta,trajP):
     #MDH = glob.getMDH()
     hpi = glob.getHpi()
 
-    ind = np.size(trajCoM)
+    ind = np.size(trajP,0)
         
     hOrg = np.array([[1],[0], [0], [0], [0], [0], [0], [0]]) #posição da base
     dt = hEdo 
@@ -30,22 +30,17 @@ def calculoMhd(trajCoM,theta,trajP):
    
 	#dt é o tempo da solução da equação Edo e, ao mesmo tempo, o passo
     T = np.size(trajCoM,0) #o tamanho de trajCoM = ind
+    tempo = (T-1)*dt #o tempo é o produto da quantidade de iterações necessárias para calcular a trajetória do CoM
 
-    #T = 100;
-    #tempo = (T-1)*dt #o tempo é o produto da quantidade de iterações necessárias para calcular a trajetória do CoM
-    tempo = (T-1)*dt
-    #pelo tamanho do intervalo de tempo(passo)
-    #t = 1:1:T;
 
     #matrizes e vetores auxiliares
     Mhd = np.zeros((8,T))
     Mha = np.zeros((8,T))
     Mdhd = np.zeros((8,T))
     Mtheta = np.zeros((6,T))
-    Mhd = np.zeros((8,1))
-    Mdhd = np.zeros((8,1))
-    Mhd2 = np.zeros((8,1))
-    Mdhd2 = np.zeros((8,1))
+    Mdhd = np.zeros((8,T))
+    Mhd2 = np.zeros((8,T))
+    Mdhd2 = np.zeros((8,T))
 
     # Mhd2 = np.zeros((8,T))
     # Mha2 = np.zeros((8,T))
@@ -71,8 +66,7 @@ def calculoMhd(trajCoM,theta,trajP):
         r = np.array([1, 0, 0, 0]).reshape((4,1))
         hd = transformacao(p,r)
         hd = dualQuatMult(hB1,hd)
-        for j in range(8):
-            Mhd[j,i] = hd[j,0]
+        Mhd[:,i] = hd[:,0]
         #transformação da base até o centro de massa
         #se i<ind, o robô ainda não atingiu a posição de td, então a transformação é calculada em relação ao pé
 	    #quando o robô chega na fase de TD, a transformação é calculada em relação ao CoM
@@ -84,8 +78,7 @@ def calculoMhd(trajCoM,theta,trajP):
             rb =  np.concatenate((realRb,np.sin(thetab/2)*n), axis = 0).reshape((4,1))  
             hd = transformacao(p,rb) #posição desejada
             hd = dualQuatMult(hB1,hd)#transformação da base até o pé
-            for j in range(8):
-                Mhd2[j,i] = hd[j,0]
+            Mhd2[:,i] = hd[:,0]
         else:
             Mhd2[:,i] = Mhd2[:,ind-1]
   
@@ -96,5 +89,11 @@ def calculoMhd(trajCoM,theta,trajP):
     for i in range (1,T,1):
         Mdhd[:,i] = (Mhd[:,i] - Mhd[:,i-1])*(1/dt) #por que ele fazer isso????????????????????????????????????????????????????
         Mdhd2[:,i]  =  (Mhd2[:,i] - Mhd2[:,i-1])*(1/dt) #derivada de hd, que é a posição desejada        
-
-    return Mhd, Mhd2, Mdhd, Mdhd2, tempo     
+    
+    if phase == 1:
+        ha = kinematicRobo(theta,hOrg,hP,1,1) #cinemática do pé esquerdo até o CoM
+        ha2 = kinematicRobo(theta,hOrg,hP,1,0) #cinemática de um pé até o outro
+    else:
+        ha = ha2 = np.zeros((8,1))
+    
+    return ha, ha2, hP, Mhd, Mhd2, Mdhd, Mdhd2, tempo    
